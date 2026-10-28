@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Un push nuevo cancela la ejecución anterior de la misma rama.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: Lint y tests unitarios
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+
+  e2e:
+    name: Build y E2E (${{ matrix.site }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        # En un clon de cliente, deja solo su sitio (o elimina la matriz y SITE_ID).
+        site: [construction, barbershop]
+    env:
+      SITE_ID: ${{ matrix.site }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: playwright-report-${{ matrix.site }}
+          path: playwright-report/
+          retention-days: 7
+
+  # Check único para la protección de main: su nombre no cambia aunque cambie la matriz,
+  # así la base y cada clon exigen los mismos checks.
+  ci-complete:
+    name: CI completo
+    if: always()
+    needs: [quality, e2e]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      # Sin if: always() un job omitido cuenta como aprobado; por eso se revisa cada resultado.
+      - name: Verificar que todos los jobs pasaron
+        if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') || contains(needs.*.result, 'skipped')
+        run: |
+          echo "Resultados: ${{ join(needs.*.result, ', ') }}"
+          exit 1
+      - run: echo "Todos los jobs pasaron"
