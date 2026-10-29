@@ -41,7 +41,6 @@ export default async function HomePage() {
           id={sectionIds.contact}
           label={labels.contact}
           contact={site.contact}
-          social={site.social}
         />
       )}
     </>

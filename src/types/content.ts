@@ -18,7 +18,8 @@ export type HeroContent = {
   eyebrow?: string;
   title: string;
   description: string;
-  image?: ImageAsset;
+  /** Una imagen se muestra fija; varias, como carrusel (la primera es la que carga primero). */
+  images?: ImageAsset[];
   primaryCta: CallToAction;
   secondaryCta?: CallToAction;
 };

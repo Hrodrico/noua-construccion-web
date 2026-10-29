@@ -13,6 +13,10 @@ type Props = {
 };
 
 export function Header({ name, logo, navigation, cta }: Props) {
+  // En escritorio el botón CTA ya lleva a su destino: no repetirlo como enlace del menú.
+  // El botón comparte el breakpoint del menú (md): en móvil el destino queda solo dentro del menú.
+  const desktopNavigation = cta ? navigation.filter((item) => item.href !== cta.href) : navigation;
+
   return (
     <header className="sticky top-0 z-30 border-b border-border bg-background/90 backdrop-blur">
       <Container className="flex h-16 items-center justify-between gap-6">
@@ -25,10 +29,13 @@ export function Header({ name, logo, navigation, cta }: Props) {
         </Link>
 
         <nav aria-label="Principal" className="hidden md:block">
-          <ul className="flex items-center gap-6 text-sm font-medium">
-            {navigation.map((item) => (
+          <ul className="flex items-center gap-1 text-sm font-medium">
+            {desktopNavigation.map((item) => (
               <li key={item.href}>
-                <Link href={item.href} className="text-foreground/80 transition hover:text-foreground">
+                <Link
+                  href={item.href}
+                  className="rounded-full px-3 py-2 text-foreground/80 transition hover:bg-foreground/10 hover:text-foreground"
+                >
                   {item.label}
                 </Link>
               </li>
@@ -37,10 +44,13 @@ export function Header({ name, logo, navigation, cta }: Props) {
         </nav>
 
         <div className="flex items-center gap-2">
+          {/* La visibilidad va en el contenedor: el inline-flex de ButtonLink le gana a "hidden". */}
           {cta && (
-            <ButtonLink href={cta.href} className="hidden px-5 py-2 sm:inline-flex">
-              {cta.label}
-            </ButtonLink>
+            <div className="hidden md:block">
+              <ButtonLink href={cta.href} className="px-5 py-2">
+                {cta.label}
+              </ButtonLink>
+            </div>
           )}
           <MobileMenu navigation={navigation} />
         </div>

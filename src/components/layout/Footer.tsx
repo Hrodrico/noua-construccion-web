@@ -20,7 +20,7 @@ export function Footer({ name, tagline, navigation, social, contactLines, year }
         <div>
           <p className="text-lg font-bold">{name}</p>
           <p className="mt-2 text-sm opacity-80">{tagline}</p>
-          <SocialLinks links={social} className="mt-6" />
+          <SocialLinks links={social} label="Síguenos" className="mt-6" />
         </div>
 
         <nav aria-label="Pie de página">

@@ -4,16 +4,12 @@
 
 Este archivo orienta a Claude Code (claude.ai/code) al trabajar con el código de este repositorio.
 
-Guía para trabajar en este repositorio y en los proyectos clonados desde él.
-
 ## Qué es este repo
 
-`business-web-starter` es la **versión inicial** de sitios y apps para negocios (construcción, barbería, mecánica, fletes, e-commerce…). Cada cliente se crea con "Use this template" en un repo propio y evoluciona por separado: no hay sincronización automática con la base.
+`noua-construccion-web` es el sitio de **Noua Construcción** (terrazas, quinchos, piscinas, ampliaciones y remodelaciones). Es un **clon de cliente** de la base [`business-web-starter`](https://github.com/Hrodrico/business-web-starter): comparte su arquitectura y se puede extender libremente (login, base de datos, nuevas rutas) respetando las reglas de abajo para que siga siendo mantenible.
 
-Antes de cambiar algo, identifica en cuál de los dos contextos estás:
-
-- **Base** (`business-web-starter`): solo cambios genéricos que sirvan a cualquier rubro. Nada específico de un cliente en componentes, `lib/` ni `types/`. Los negocios de `src/sites/` son demos para validar la base.
-- **Clon de cliente** (ej: `noua-construccion-web`): se puede extender libremente (login, base de datos, nuevas rutas), pero respetando la arquitectura de abajo para que el proyecto siga siendo mantenible.
+- **Historial enlazado con la base.** El remoto `base` apunta a `business-web-starter` en solo lectura (push desactivado). Para traer mejoras: `git fetch base` → rama nueva (ej. `chore/sync-base`) → `git merge base/main` → PR fusionado con **Create a merge commit** (no squash ni rebase, para no romper el enlace). Esperar conflictos en lo que Noua personalizó: `src/sites/`, CI, README y este archivo.
+- **Mejoras genéricas** hechas aquí (que sirvan a cualquier rubro) se anotan para portarlas a mano a la base.
 
 ## Stack y comandos
 
@@ -25,8 +21,7 @@ Next.js 16 (App Router, `cacheComponents` + `partialPrefetching`), React 19, Typ
 - **ESLint 10:** `npm install` muestra 3 avisos `ERESOLVE overriding peer dependency` porque `eslint-plugin-react`, `eslint-plugin-jsx-a11y` y `eslint-plugin-import` aún no declaran ESLint 10. Son esperados: sus reglas se verificaron y funcionan. Desaparecen cuando esos plugins actualicen su rango.
 
 ```bash
-npm run dev                      # sitio por defecto
-SITE_ID=barbershop npm run dev   # otro negocio de src/sites
+npm run dev
 npm run lint
 npm test                         # unitarios (Vitest)
 npx vitest run src/lib/contact.test.ts   # un solo archivo (o: npx vitest run -t "nombre del test")
@@ -35,15 +30,15 @@ npm run test:e2e                 # E2E (Playwright): hace build + start en el pu
 npm run build                    # verificación obligatoria antes de cerrar una tarea
 ```
 
-Toda tarea termina con `npm run lint`, `npm test` y `npm run build` sin errores (y `npm run test:e2e` si toca rutas, layouts o páginas). En la base, ejecuta además `SITE_ID=barbershop npm run build` y `SITE_ID=barbershop npm run test:e2e` para confirmar que el cambio no depende de un negocio. La primera vez, `npx playwright install chromium`.
+Toda tarea termina con `npm run lint`, `npm test` y `npm run build` sin errores (y `npm run test:e2e` si toca rutas, layouts o páginas). La primera vez, `npx playwright install chromium`.
 
 ### Tests
 
 - **Unitarios junto al archivo:** `Rating.tsx` → `Rating.test.tsx` en la misma carpeta (Vitest + Testing Library, jsdom). Si se borra o copia un componente, su test va con él. Cubren `lib/`, componentes síncronos y el contenido.
 - **E2E en `e2e/`:** Playwright contra el build de producción, en móvil (Pixel 7) y escritorio. Los Server Components `async` (páginas que llaman a `lib/data.ts`) solo se prueban aquí: Vitest no los soporta.
-- **Agnósticos al negocio:** nunca escribir textos de un negocio en un test. Los E2E leen la config activa desde `e2e/site.ts` y `data.test.ts` deriva sus aserciones de `activeSite.content`; así pasan con cualquier `SITE_ID` y en cualquier clon.
-- **`src/sites/sites.test.ts`** valida el contenido de **todos** los negocios registrados (slugs únicos y aptos para URL, fechas ISO, ratings 1–5, reseñas enlazadas a trabajos existentes, `alt` no vacío, colores hex y contraste WCAG AA de los pares texto/fondo del tema). Es la red de seguridad al editar `config.ts`/`content.ts` de un cliente.
-- **CI:** `.github/workflows/ci.yml` (GitHub Actions) corre lint + unitarios una vez, build + E2E por cada negocio de la matriz `site` y un job final `CI completo` que falla si algún job anterior falló o se omitió. La protección de `main` (se configura en cada repo; el template no la copia) exige solo `Lint y tests unitarios` y `CI completo`, nombres que no cambian con la matriz: no renombrar esos jobs. Al agregar o quitar un negocio en `src/sites/`, actualiza la matriz. Con `CI=true`, Playwright no compila: usa el build del paso previo. Vercel no corre tests.
+- **Agnósticos al negocio:** nunca escribir textos de un negocio en un test. Los E2E leen la config activa desde `e2e/site.ts` y `data.test.ts` deriva sus aserciones de `activeSite.content`; así no hay que tocarlos al cambiar textos y siguen siendo compatibles con la base.
+- **`src/sites/sites.test.ts`** valida el contenido de los negocios registrados (slugs únicos y aptos para URL, fechas ISO, ratings 1–5, reseñas enlazadas a trabajos existentes, `alt` no vacío, imágenes locales que existen en `public/`, fotos de trabajos en `/images/projects/<año>/<slug>/`, colores hex y contraste WCAG AA de los pares texto/fondo del tema). Es la red de seguridad al editar `config.ts`/`content.ts`.
+- **CI:** `.github/workflows/ci.yml` (GitHub Actions) corre lint + unitarios, build + E2E y un job final `CI completo` que falla si algún job anterior falló o se omitió. La protección de `main` está versionada en `.github/rulesets/main.json` (se importa en GitHub → Settings → Rules → Rulesets → Import a ruleset) y exige solo `Lint y tests unitarios` y `CI completo`: no renombrar esos jobs. Con `CI=true`, Playwright no compila: usa el build del paso previo. Vercel no corre tests.
 - Un trabajo inexistente (`/trabajos/<slug>`) responde 200 en la primera visita por el streaming de Cache Components; Next.js renderiza not-found e inyecta `noindex`. Es el comportamiento documentado; el E2E verifica eso y no el código HTTP.
 
 ## Arquitectura
@@ -65,7 +60,7 @@ src/types/          Contratos: site.ts (configuración), content.ts (contenido)
 
 ### Flujos que cruzan archivos
 
-- **Negocio activo:** `src/sites/index.ts` registra los negocios y resuelve `SITE_ID` (o `DEFAULT_SITE`) al cargar el módulo; un `SITE_ID` inexistente lanza error. `lib/site.ts` expone su `config` y `lib/data.ts` su `content`. Agregar un negocio = carpeta nueva + entrada en el objeto `sites`.
+- **Negocio activo:** `src/sites/index.ts` registra Noua (`sites.construction`) y lo expone como `activeSite`. `lib/site.ts` expone su `config` y `lib/data.ts` su `content`.
 - **Tema:** `config.theme` → `themeToCssVars()` (`lib/theme.ts`) lo aplica como variables `--brand-*` en el `<html>` del layout raíz → `globals.css` las mapea a tokens de Tailwind (`--color-primary`, etc.) con `@theme inline`. Un color nuevo requiere tocar `ThemeColors`, `theme.ts`, `globals.css` y cada `config.ts`.
 
 ### Reglas que no se rompen
@@ -74,7 +69,7 @@ src/types/          Contratos: site.ts (configuración), content.ts (contenido)
 2. **Contenido solo vía `src/lib/data.ts`.** Páginas y metadatos llaman a `getServices()`, `getProjects()`, `getReviews()`, etc. Para pasar a base de datos o CMS se reescribe el cuerpo de esas funciones manteniendo la firma (o se agregan nuevas), no se lee la base de datos desde componentes.
 3. **Una sola fuente por dato.** Identidad, contacto, colores, SEO, secciones activas y etiquetas viven en `config.ts`; textos e items en `content.ts`. No duplicar entre ambos ni escribir textos de negocio en componentes.
 4. **Vocabulario genérico en código, etiquetas en config.** En código: `projects`, `services`, `reviews`. Lo visible sale de `config.labels` ("Obras realizadas", "Nuestros cortes").
-5. **Colores por tokens.** Usa las clases del tema (`bg-primary`, `text-primary-foreground`, `bg-accent`, `bg-surface`, `text-muted`, `border-border`, `bg-background`, `text-foreground`). Nunca colores hex ni paletas de Tailwind fijas (`bg-gray-100`) en componentes; un tema oscuro (barbería) y uno claro (construcción) deben verse bien con el mismo componente.
+5. **Colores por tokens.** Usa las clases del tema (`bg-primary`, `text-primary-foreground`, `bg-accent`, `bg-surface`, `text-muted`, `border-border`, `bg-background`, `text-foreground`). Nunca colores hex ni paletas de Tailwind fijas (`bg-gray-100`) en componentes; así un cambio de paleta en `config.ts` se aplica en todo el sitio.
 6. **Tipos primero.** Un campo nuevo se agrega en `src/types/` antes de usarlo; si es obligatorio, actualiza todos los negocios de `src/sites/`.
 
 ## Next.js 16: particularidades de este proyecto
@@ -88,11 +83,10 @@ Esta versión difiere de lo que suele conocerse de Next.js; consulta `node_modul
 - **Datos por usuario (login):** leer `cookies()`/`headers()` fuera de los scopes con `"use cache"` y pasar los valores como argumento; envolver lo dinámico en `<Suspense>`. Revisar `02-guides/authentication-with-cache-components.md` en la doc local.
 - **Server Components por defecto.** `"use client"` solo para interactividad (ej: `MobileMenu`), lo más abajo posible en el árbol.
 
-## Cómo escalar en un clon
+## Cómo escalar el proyecto
 
 | Necesidad | Cómo hacerlo |
 | --- | --- |
-| Quitar demos | Borrar carpetas sobrantes de `src/sites/`, dejar un solo negocio en `src/sites/index.ts`, ajustar `DEFAULT_SITE` y dejar solo ese sitio en la matriz `site` de `.github/workflows/ci.yml`. Configurar en GitHub la protección de `main` (ver README → Integración continua). |
 | Nueva sección del home | Tipo en `types/content.ts` → contenido en `content.ts` → getter en `lib/data.ts` → componente en `components/sections/` (props, sin config) → clave en `SectionKey`, `sections` y `labels` → render condicional en `(site)/page.tsx` → navegación en `lib/navigation.ts`. |
 | Nueva página pública | `src/app/(site)/<ruta>/page.tsx` con `metadata` (title + `alternates.canonical`) y agregarla a `sitemap.ts`. |
 | Login / panel | Grupos `src/app/(auth)/` y `src/app/(dashboard)/` con layout propio; protección de rutas en `src/proxy.ts` (reemplaza a middleware en Next 16). El sitio público no debe depender de la sesión. |
@@ -101,13 +95,10 @@ Esta versión difiere de lo que suele conocerse de Next.js; consulta `node_modul
 | E-commerce / catálogo | Ruta `(site)/productos/` siguiendo el patrón de `trabajos/` (listado + `[slug]` + `generateStaticParams`). |
 | Imágenes remotas | Configurar `images.remotePatterns` en `next.config.ts`. |
 
-Si una mejora hecha en un clon es genérica (sirve a cualquier rubro), anótala para portarla manualmente a la base.
-
 ## Variables de entorno y secretos
 
 - Documentar cada variable en `.env.example` (sí se versiona; `.env*` está ignorado salvo ese archivo).
 - Nunca commitear secretos. Variables expuestas al cliente solo con prefijo `NEXT_PUBLIC_` y solo si son públicas por naturaleza.
-- `SITE_ID` solo tiene sentido en la base; en un clon puede eliminarse.
 
 ## Calidad mínima
 

@@ -31,6 +31,15 @@
   --font-sans: var(--font-geist-sans);
 }
 
+/*
+ * Color de marca de WhatsApp: igual para todos los negocios, por eso no es parte del tema.
+ * Texto oscuro porque el blanco sobre este verde no llega al contraste AA (1.98:1 vs 9.4:1).
+ */
+@theme {
+  --color-whatsapp: #25d366;
+  --color-whatsapp-foreground: #0b141a;
+}
+
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 5rem;

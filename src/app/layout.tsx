@@ -30,10 +30,15 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
+    // suppressHydrationWarning: extensiones (ej. LanguageTool) agregan atributos a <html> antes
+    // de hidratar. Solo afecta los atributos de esta etiqueta, no a sus hijos.
     <html
       lang={site.locale}
       style={themeToCssVars(site.theme)}
       className={`${geistSans.variable} h-full antialiased`}
+      // globals.css usa scroll-behavior: smooth; así Next lo desactiva al cambiar de ruta.
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col font-sans">{children}</body>
     </html>

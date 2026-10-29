@@ -3,6 +3,7 @@ import { site } from "@/lib/site";
 import { whatsappUrl } from "@/lib/contact";
 import { buildNavigation, sectionIds } from "@/lib/navigation";
 import { Footer } from "@/components/layout/Footer";
+import { HashlessSectionLinks } from "@/components/layout/HashlessSectionLinks";
 import { Header } from "@/components/layout/Header";
 import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
 
@@ -34,6 +35,7 @@ export default async function SiteLayout({ children }: LayoutProps<"/">) {
       >
         Saltar al contenido
       </a>
+      <HashlessSectionLinks />
       <Header name={site.name} logo={site.branding.logo} navigation={navigation} cta={cta} />
       <main id="contenido" className="flex-1">
         {children}
@@ -46,7 +48,13 @@ export default async function SiteLayout({ children }: LayoutProps<"/">) {
         contactLines={contactLines}
         year={await getCurrentYear()}
       />
-      {whatsapp && <WhatsAppButton href={whatsappUrl(whatsapp)} />}
+      {whatsapp && (
+        <WhatsAppButton
+          href={whatsappUrl(whatsapp)}
+          // La sección de contacto ya tiene su botón de WhatsApp: no mostrar ambos a la vez.
+          hideWhenVisible={site.sections.contact ? sectionIds.contact : undefined}
+        />
+      )}
     </>
   );
 }

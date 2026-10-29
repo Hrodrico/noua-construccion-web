@@ -101,6 +101,36 @@ export const CloseIcon = (props: IconProps) => (
   </svg>
 );
 
+export const ChevronLeftIcon = (props: IconProps) => (
+  <svg {...base} {...props}>
+    <path d="M15 18l-6-6 6-6" />
+  </svg>
+);
+
+export const ChevronRightIcon = (props: IconProps) => (
+  <svg {...base} {...props}>
+    <path d="M9 18l6-6-6-6" />
+  </svg>
+);
+
+export const ExpandIcon = (props: IconProps) => (
+  <svg {...base} {...props}>
+    <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
+  </svg>
+);
+
+export const PauseIcon = (props: IconProps) => (
+  <svg {...base} {...props}>
+    <path d="M9 5v14M15 5v14" />
+  </svg>
+);
+
+export const PlayIcon = (props: IconProps) => (
+  <svg {...base} {...props}>
+    <path d="M7 5l12 7-12 7z" />
+  </svg>
+);
+
 export const socialIcons: Record<SocialNetwork, (props: IconProps) => React.JSX.Element> = {
   instagram: InstagramIcon,
   facebook: FacebookIcon,
