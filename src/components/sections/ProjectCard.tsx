@@ -10,7 +10,7 @@ export function ProjectCard({ project }: Props) {
   const meta = [project.category, project.location].filter(Boolean).join(" · ");
 
   return (
-    <article className="group overflow-hidden rounded-2xl border border-border bg-background transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/15 focus-within:-translate-y-1 focus-within:shadow-xl focus-within:shadow-primary/15 motion-reduce:transform-none motion-reduce:transition-none">
+    <article className="group overflow-hidden rounded-2xl border border-border bg-background transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/15 focus-within:-translate-y-1 focus-within:shadow-xl focus-within:shadow-primary/15 active:translate-y-0 active:scale-[0.99] active:shadow-md motion-reduce:transform-none motion-reduce:transition-none">
       <Link href={`/trabajos/${project.slug}`}>
         <Media
           image={project.cover}
@@ -19,7 +19,7 @@ export function ProjectCard({ project }: Props) {
           className="aspect-[4/3] transition group-hover:opacity-90"
         />
         <div className="p-6">
-          {meta && <p className="text-xs font-semibold tracking-wider text-accent uppercase">{meta}</p>}
+          {meta && <p className="text-xs font-semibold tracking-wider text-accent-text uppercase">{meta}</p>}
           <h3 className="mt-2 text-lg font-semibold group-hover:underline">{project.title}</h3>
           <p className="mt-2 text-sm text-muted">{project.summary}</p>
         </div>

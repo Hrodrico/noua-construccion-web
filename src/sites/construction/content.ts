@@ -5,7 +5,7 @@ import type { SiteContent } from "@/types/content";
 // TODO: activar `sections.reviews` en config.ts cuando haya reseñas reales.
 export const content: SiteContent = {
   hero: {
-    eyebrow: "Construcción · Remodelación · Mantención",
+    eyebrow: "Constructora en la Región Metropolitana",
     title: "Hacemos realidad tus proyectos",
     description:
       "Somos una constructora nueva que trabaja con calidad, compromiso y confianza. Cuéntanos tu idea y te enviamos una cotización sin compromiso.",
@@ -33,6 +33,10 @@ export const content: SiteContent = {
       "Noua nace para construir, ampliar, remodelar y mantener los espacios de tu casa con un trato cercano: hablas directamente con quienes ejecutan tu obra.",
       "Trabajamos con personal calificado, cumplimos los plazos que acordamos y garantizamos nuestros trabajos. Te acompañamos desde la idea hasta la entrega con atención personalizada.",
     ],
+    image: {
+      src: "/images/projects/2026/reparacion-filtracion-bajo-radier/radier-abierto.webp",
+      alt: "Radier abierto en plena faena para reparar una filtración bajo el piso de la cocina",
+    },
   },
   services: [
     {
@@ -107,7 +111,7 @@ export const content: SiteContent = {
           alt: "Mismo sector terminado con porcelanato nuevo",
         },
       ],
-      featured: true,
+      featured: false,
     },
     {
       slug: "cierre-patio-revestimiento",

@@ -24,7 +24,7 @@ export default async function SiteLayout({ children }: LayoutProps<"/">) {
     (line): line is string => Boolean(line),
   );
   const cta = site.sections.contact
-    ? { label: site.labels.contact, href: `/#${sectionIds.contact}` }
+    ? { label: site.actions?.quote ?? site.labels.contact, href: `/#${sectionIds.contact}` }
     : undefined;
 
   return (

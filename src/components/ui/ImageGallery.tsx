@@ -2,8 +2,11 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import type { ReactNode } from "react";
 import type { ImageAsset } from "@/types/content";
 import { ChevronLeftIcon, ChevronRightIcon, CloseIcon, ExpandIcon } from "@/components/ui/icons";
+import { usePrefersReducedMotion } from "@/lib/usePrefersReducedMotion";
+import { useSwipeTrack } from "@/lib/useSwipeTrack";
 
 type Props = {
   images: ImageAsset[];
@@ -12,24 +15,22 @@ type Props = {
   className?: string;
 };
 
-const SWIPE_THRESHOLD = 50;
-
 const navButtonClass =
-  "flex h-10 w-10 items-center justify-center rounded-full bg-background/85 text-foreground shadow transition hover:bg-background";
+  "flex h-11 w-11 items-center justify-center rounded-full bg-background/85 text-foreground shadow transition hover:bg-background active:scale-95 aria-disabled:pointer-events-none aria-disabled:opacity-40";
 
 /**
  * Galería con imagen principal, miniaturas y vista a pantalla completa (sin recorte)
- * para ver los detalles. Se navega con botones, teclas ← → y deslizando en móvil.
+ * para ver los detalles. Se navega con botones, teclas ← → y deslizando (dedo o mouse);
+ * no da la vuelta: en los extremos el arrastre ofrece resistencia.
  */
 export function ImageGallery({ images, label, className = "" }: Props) {
   const [current, setCurrent] = useState(0);
   const [expanded, setExpanded] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const touchStartX = useRef<number | null>(null);
 
   const total = images.length;
   const image = images[current];
-  const go = (index: number) => setCurrent((index + total) % total);
+  const go = (index: number) => setCurrent(Math.min(total - 1, Math.max(0, index)));
 
   // <dialog> modal: atrapa el foco y cierra con Esc de forma nativa.
   useEffect(() => {
@@ -44,64 +45,27 @@ export function ImageGallery({ images, label, className = "" }: Props) {
     };
   }, [expanded]);
 
-  const swipeHandlers = {
-    onTouchStart: (event: React.TouchEvent) => {
-      touchStartX.current = event.touches[0].clientX;
-    },
-    onTouchEnd: (event: React.TouchEvent) => {
-      if (touchStartX.current === null) return;
-      const delta = event.changedTouches[0].clientX - touchStartX.current;
-      if (Math.abs(delta) > SWIPE_THRESHOLD) go(current + (delta < 0 ? 1 : -1));
-      touchStartX.current = null;
-    },
-  };
-
-  const arrows = (variant: "stage" | "dialog") =>
-    total > 1 && (
-      <>
-        <button
-          type="button"
-          onClick={() => go(current - 1)}
-          aria-label="Imagen anterior"
-          className={`${navButtonClass} absolute top-1/2 left-3 -translate-y-1/2 ${variant === "dialog" ? "sm:left-6" : ""}`}
-        >
-          <ChevronLeftIcon className="h-5 w-5" />
-        </button>
-        <button
-          type="button"
-          onClick={() => go(current + 1)}
-          aria-label="Imagen siguiente"
-          className={`${navButtonClass} absolute top-1/2 right-3 -translate-y-1/2 ${variant === "dialog" ? "sm:right-6" : ""}`}
-        >
-          <ChevronRightIcon className="h-5 w-5" />
-        </button>
-      </>
-    );
-
   return (
     <div role="region" aria-roledescription="galería" aria-label={label} className={className}>
-      <div className="relative aspect-[16/9] overflow-hidden rounded-3xl bg-surface" {...swipeHandlers}>
+      <SwipeViewer
+        images={images}
+        current={current}
+        onChange={go}
+        sizes="(min-width: 1152px) 1152px, 100vw"
+        className="aspect-[16/9] rounded-3xl bg-surface"
+        imageClassName="object-cover"
+        highPriorityFirst
+      >
         <button
           type="button"
           onClick={() => setExpanded(true)}
           aria-label={`Ver en pantalla completa: ${image.alt}`}
           className="group absolute inset-0 cursor-zoom-in"
         >
-          <Image
-            key={image.src}
-            src={image.src}
-            alt={image.alt}
-            fill
-            sizes="(min-width: 1152px) 1152px, 100vw"
-            loading={current === 0 ? "eager" : undefined}
-            fetchPriority={current === 0 ? "high" : undefined}
-            className="object-cover"
-          />
-          <span className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-full bg-background/85 text-foreground shadow transition group-hover:bg-background">
+          <span className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-full bg-background/85 text-foreground shadow transition group-hover:bg-background group-active:scale-95">
             <ExpandIcon className="h-5 w-5" />
           </span>
         </button>
-        {arrows("stage")}
         {total > 1 && (
           <p
             aria-live="polite"
@@ -110,7 +74,7 @@ export function ImageGallery({ images, label, className = "" }: Props) {
             {current + 1} / {total}
           </p>
         )}
-      </div>
+      </SwipeViewer>
 
       {total > 1 && (
         <ul className="mt-4 grid grid-cols-4 gap-3 sm:grid-cols-6">
@@ -121,7 +85,7 @@ export function ImageGallery({ images, label, className = "" }: Props) {
                 onClick={() => go(index)}
                 aria-label={`Ver imagen ${index + 1}: ${thumb.alt}`}
                 aria-current={index === current}
-                className={`relative block aspect-[4/3] w-full overflow-hidden rounded-xl border-2 transition ${
+                className={`relative block aspect-[4/3] w-full overflow-hidden rounded-xl border-2 transition active:scale-95 ${
                   index === current ? "border-accent" : "border-transparent opacity-70 hover:opacity-100"
                 }`}
               >
@@ -144,9 +108,15 @@ export function ImageGallery({ images, label, className = "" }: Props) {
       >
         {expanded && (
           <div className="flex h-full w-full flex-col">
-            <div className="relative flex-1" {...swipeHandlers}>
-              <Image src={image.src} alt={image.alt} fill sizes="100vw" className="object-contain" />
-              {arrows("dialog")}
+            <SwipeViewer
+              images={images}
+              current={current}
+              onChange={go}
+              sizes="100vw"
+              className="flex-1"
+              imageClassName="object-contain"
+              arrowsClassName="sm:mx-3"
+            >
               <button
                 type="button"
                 onClick={() => setExpanded(false)}
@@ -156,7 +126,7 @@ export function ImageGallery({ images, label, className = "" }: Props) {
               >
                 <CloseIcon className="h-5 w-5" />
               </button>
-            </div>
+            </SwipeViewer>
             <p className="px-4 py-4 text-center text-sm sm:text-base">
               {image.alt}
               {total > 1 && <span className="ml-2 opacity-75">({current + 1} / {total})</span>}
@@ -164,6 +134,99 @@ export function ImageGallery({ images, label, className = "" }: Props) {
           </div>
         )}
       </dialog>
+    </div>
+  );
+}
+
+type ViewerProps = {
+  images: ImageAsset[];
+  current: number;
+  onChange: (index: number) => void;
+  sizes: string;
+  className: string;
+  imageClassName: string;
+  arrowsClassName?: string;
+  /** Prioridad alta para la primera imagen (solo en la vista principal de la página). */
+  highPriorityFirst?: boolean;
+  /** Controles superpuestos a las imágenes. */
+  children: ReactNode;
+};
+
+/**
+ * Visor deslizable: las imágenes siguen al dedo y, al soltar, terminan con un resorte que
+ * hereda la velocidad del gesto. Es un componente aparte para que el de pantalla completa
+ * arranque en la imagen activa al abrirse.
+ */
+function SwipeViewer({
+  images,
+  current,
+  onChange,
+  sizes,
+  className,
+  imageClassName,
+  arrowsClassName = "",
+  highPriorityFirst,
+  children,
+}: ViewerProps) {
+  const reducedMotion = usePrefersReducedMotion();
+  const { viewportRef, handlers, slideStyle, distance } = useSwipeTrack({
+    count: images.length,
+    index: current,
+    onIndexChange: onChange,
+    reducedMotion,
+  });
+  const total = images.length;
+
+  return (
+    <div
+      ref={viewportRef}
+      {...handlers}
+      className={`relative touch-pan-y touch-pinch-zoom overflow-hidden select-none ${className}`}
+    >
+      {images.map((slide, index) => (
+        <div
+          key={slide.src}
+          data-slide
+          aria-hidden={index !== current}
+          className="absolute inset-0 will-change-transform"
+          style={slideStyle(index)}
+        >
+          <Image
+            src={slide.src}
+            alt={slide.alt}
+            fill
+            sizes={sizes}
+            draggable={false}
+            // Las vecinas se cargan antes de llegar a verse al deslizar.
+            loading={distance(index) <= 1 ? "eager" : "lazy"}
+            fetchPriority={highPriorityFirst && index === 0 ? "high" : undefined}
+            className={imageClassName}
+          />
+        </div>
+      ))}
+      {children}
+      {total > 1 && (
+        <>
+          <button
+            type="button"
+            onClick={() => onChange(current - 1)}
+            aria-label="Imagen anterior"
+            aria-disabled={current === 0}
+            className={`${navButtonClass} absolute top-1/2 left-3 -translate-y-1/2 ${arrowsClassName}`}
+          >
+            <ChevronLeftIcon className="h-5 w-5" />
+          </button>
+          <button
+            type="button"
+            onClick={() => onChange(current + 1)}
+            aria-label="Imagen siguiente"
+            aria-disabled={current === total - 1}
+            className={`${navButtonClass} absolute top-1/2 right-3 -translate-y-1/2 ${arrowsClassName}`}
+          >
+            <ChevronRightIcon className="h-5 w-5" />
+          </button>
+        </>
+      )}
     </div>
   );
 }

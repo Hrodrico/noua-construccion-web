@@ -46,3 +46,6 @@ next-env.d.ts
 
 # env de ejemplo (sí se versiona)
 !.env.example
+
+# ajustes personales del editor
+.vscode/

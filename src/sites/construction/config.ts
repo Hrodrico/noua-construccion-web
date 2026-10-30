@@ -24,13 +24,14 @@ export const config: SiteConfig = {
     { network: "instagram", url: "https://www.instagram.com/noua.contacto/" },
   ],
   branding: {
-    logo: "/logos/logo-noua.png",
+    logo: "/logos/logo-noua-mark.png",
   },
   theme: {
     primary: "#0A1F3C",
     primaryForeground: "#FFFFFF",
     accent: "#F78F36",
     accentForeground: "#0A1F3C",
+    accentText: "#A8530F",
     background: "#FFFFFF",
     foreground: "#20252B",
     surface: "#F4F2EF",
@@ -50,6 +51,10 @@ export const config: SiteConfig = {
     projects: true,
     reviews: false,
     contact: true,
+  },
+  actions: {
+    quote: "Cotiza tu proyecto",
+    allProjects: "Ver todas las obras",
   },
   labels: {
     about: "Sobre nosotros",

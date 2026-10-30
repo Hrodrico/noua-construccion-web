@@ -8,6 +8,7 @@ export function themeToCssVars(theme: ThemeColors): CSSProperties {
     "--brand-primary-foreground": theme.primaryForeground,
     "--brand-accent": theme.accent,
     "--brand-accent-foreground": theme.accentForeground,
+    "--brand-accent-text": theme.accentText,
     "--brand-background": theme.background,
     "--brand-foreground": theme.foreground,
     "--brand-surface": theme.surface,

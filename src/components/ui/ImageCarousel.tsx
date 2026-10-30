@@ -1,9 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { ImageAsset } from "@/types/content";
 import { ChevronLeftIcon, ChevronRightIcon, PauseIcon, PlayIcon } from "@/components/ui/icons";
+import { usePrefersReducedMotion } from "@/lib/usePrefersReducedMotion";
+import { useSwipeTrack } from "@/lib/useSwipeTrack";
 
 type Props = {
   images: ImageAsset[];
@@ -18,43 +20,35 @@ type Props = {
 };
 
 const controlClass =
-  "flex h-10 w-10 items-center justify-center rounded-full bg-background/85 text-foreground shadow transition hover:bg-background";
+  "flex h-11 w-11 items-center justify-center rounded-full bg-background/85 text-foreground shadow transition hover:bg-background active:scale-95";
 
 /**
- * Carrusel de imágenes con relación de aspecto fija. Avanza solo, pero se detiene
- * con el puntero encima, con foco de teclado, con el botón de pausa o si el sistema
- * pide reducir el movimiento (WCAG 2.2.2).
+ * Carrusel de imágenes con relación de aspecto fija. Avanza solo (el indicador activo
+ * se llena mientras tanto), pero se detiene
+ * con el puntero encima, con foco de teclado, al arrastrar, con el botón de pausa o si
+ * el sistema pide reducir el movimiento (WCAG 2.2.2). Se desliza con el dedo o el mouse.
  */
 export function ImageCarousel({
   images,
   label,
   sizes,
   priority,
-  interval = 6000,
+  interval = 5000,
   className = "aspect-[4/3]",
 }: Props) {
   const [current, setCurrent] = useState(0);
   const [paused, setPaused] = useState(false);
   const [interacting, setInteracting] = useState(false);
-  const [reducedMotion, setReducedMotion] = useState(false);
+  const reducedMotion = usePrefersReducedMotion();
+  const { viewportRef, handlers, slideStyle, distance, step, dragging } = useSwipeTrack({
+    count: images.length,
+    index: current,
+    onIndexChange: setCurrent,
+    loop: true,
+    reducedMotion,
+  });
 
-  useEffect(() => {
-    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const update = () => setReducedMotion(query.matches);
-    update();
-    query.addEventListener("change", update);
-    return () => query.removeEventListener("change", update);
-  }, []);
-
-  const autoplay = !paused && !interacting && !reducedMotion;
-
-  useEffect(() => {
-    if (!autoplay) return;
-    const id = setInterval(() => setCurrent((i) => (i + 1) % images.length), interval);
-    return () => clearInterval(id);
-  }, [autoplay, images.length, interval]);
-
-  const go = (index: number) => setCurrent((index + images.length) % images.length);
+  const autoplay = !paused && !interacting && !reducedMotion && !dragging;
 
   return (
     <section
@@ -68,27 +62,36 @@ export function ImageCarousel({
         if (!event.currentTarget.contains(event.relatedTarget)) setInteracting(false);
       }}
     >
-      {images.map((image, index) => (
-        <div
-          key={image.src}
-          role="group"
-          aria-roledescription="imagen"
-          aria-label={`${index + 1} de ${images.length}`}
-          aria-hidden={index !== current}
-          className={`absolute inset-0 transition-opacity duration-700 motion-reduce:transition-none ${
-            index === current ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          <Image
-            src={image.src}
-            alt={image.alt}
-            fill
-            sizes={sizes}
-            priority={priority && index === 0}
-            className="object-cover"
-          />
-        </div>
-      ))}
+      <div
+        ref={viewportRef}
+        {...handlers}
+        className="absolute inset-0 cursor-grab touch-pan-y touch-pinch-zoom select-none active:cursor-grabbing"
+      >
+        {images.map((image, index) => (
+          <div
+            key={image.src}
+            data-slide
+            role="group"
+            aria-roledescription="imagen"
+            aria-label={`${index + 1} de ${images.length}`}
+            aria-hidden={index !== current}
+            className="absolute inset-0 will-change-transform"
+            style={slideStyle(index)}
+          >
+            <Image
+              src={image.src}
+              alt={image.alt}
+              fill
+              sizes={sizes}
+              draggable={false}
+              priority={priority && index === 0}
+              // Las vecinas se cargan antes de llegar a verse al deslizar.
+              loading={priority && index === 0 ? undefined : distance(index) <= 1 ? "eager" : "lazy"}
+              className="object-cover"
+            />
+          </div>
+        ))}
+      </div>
 
       <div className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-3 p-4">
         <button
@@ -105,16 +108,35 @@ export function ImageCarousel({
             <button
               key={image.src}
               type="button"
-              onClick={() => go(index)}
+              onClick={() => setCurrent(index)}
               aria-label={`Ver imagen ${index + 1}`}
               aria-current={index === current}
-              className="group flex h-6 min-w-6 items-center justify-center px-1"
+              className="group flex h-11 min-w-7 items-center justify-center px-1"
             >
               <span
-                className={`h-2.5 rounded-full shadow transition-all ${
-                  index === current ? "w-6 bg-accent" : "w-2.5 bg-background/85 group-hover:bg-background"
+                className={`relative h-2.5 overflow-hidden rounded-full bg-background/85 shadow transition-all group-hover:bg-background group-active:scale-90 ${
+                  index === current ? "w-10" : "w-2.5"
                 }`}
-              />
+              >
+                {index === current && (
+                  // El fin de la animación avanza a la siguiente imagen: barra y cambio nunca se desfasan,
+                  // y al pausar (animation-play-state) se retoma desde donde quedó.
+                  <span
+                    key={current}
+                    data-carousel-progress
+                    onAnimationEnd={() => step(1)}
+                    className="absolute inset-0 origin-left rounded-full bg-accent"
+                    style={
+                      reducedMotion
+                        ? undefined
+                        : {
+                            animation: `carousel-progress ${interval}ms linear forwards`,
+                            animationPlayState: autoplay ? "running" : "paused",
+                          }
+                    }
+                  />
+                )}
+              </span>
             </button>
           ))}
         </div>
@@ -122,7 +144,7 @@ export function ImageCarousel({
         <div className="flex gap-2">
           <button
             type="button"
-            onClick={() => go(current - 1)}
+            onClick={() => step(-1)}
             aria-label="Imagen anterior"
             className={controlClass}
           >
@@ -130,7 +152,7 @@ export function ImageCarousel({
           </button>
           <button
             type="button"
-            onClick={() => go(current + 1)}
+            onClick={() => step(1)}
             aria-label="Imagen siguiente"
             className={controlClass}
           >

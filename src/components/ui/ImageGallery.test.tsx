@@ -33,8 +33,8 @@ describe("ImageGallery", () => {
   it("cambia de imagen con las flechas y las miniaturas", () => {
     render(<ImageGallery images={images} label="Fotos de la obra" />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Imagen anterior" }));
-    expect(stage()).toHaveAccessibleName("Ver en pantalla completa: Tercera foto");
+    fireEvent.click(screen.getByRole("button", { name: "Imagen siguiente" }));
+    expect(stage()).toHaveAccessibleName("Ver en pantalla completa: Segunda foto");
 
     fireEvent.click(screen.getByRole("button", { name: "Ver imagen 2: Segunda foto" }));
     expect(stage()).toHaveAccessibleName("Ver en pantalla completa: Segunda foto");
@@ -42,6 +42,21 @@ describe("ImageGallery", () => {
       "aria-current",
       "true",
     );
+  });
+
+  it("no da la vuelta en los extremos", () => {
+    render(<ImageGallery images={images} label="Fotos de la obra" />);
+
+    const previous = screen.getByRole("button", { name: "Imagen anterior" });
+    expect(previous).toHaveAttribute("aria-disabled", "true");
+    fireEvent.click(previous);
+    expect(stage()).toHaveAccessibleName("Ver en pantalla completa: Primera foto");
+
+    fireEvent.click(screen.getByRole("button", { name: "Ver imagen 3: Tercera foto" }));
+    const next = screen.getByRole("button", { name: "Imagen siguiente" });
+    expect(next).toHaveAttribute("aria-disabled", "true");
+    fireEvent.click(next);
+    expect(stage()).toHaveAccessibleName("Ver en pantalla completa: Tercera foto");
   });
 
   it("abre la pantalla completa, navega con el teclado y se cierra", () => {

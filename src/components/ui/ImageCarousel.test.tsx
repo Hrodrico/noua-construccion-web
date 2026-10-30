@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ImageCarousel } from "./ImageCarousel";
 
@@ -16,17 +16,20 @@ function mockReducedMotion(matches: boolean) {
 }
 
 const visibleImage = () => screen.getByRole("img");
+// jsdom no ejecuta animaciones CSS: se simula el fin de la barra de progreso. Sin AnimationEvent
+// en jsdom, React escucha el nombre con prefijo (en el navegador usa "animationend").
+const finishProgress = (container: HTMLElement) =>
+  fireEvent(
+    container.querySelector("[data-carousel-progress]")!,
+    new Event("webkitAnimationEnd", { bubbles: true }),
+  );
+const progressState = (container: HTMLElement) =>
+  container.querySelector<HTMLElement>("[data-carousel-progress]")!.style.animationPlayState;
 
 describe("ImageCarousel", () => {
-  beforeEach(() => {
-    vi.useFakeTimers();
-    mockReducedMotion(false);
-  });
+  beforeEach(() => mockReducedMotion(false));
 
-  afterEach(() => {
-    vi.useRealTimers();
-    vi.unstubAllGlobals();
-  });
+  afterEach(() => vi.unstubAllGlobals());
 
   it("muestra solo la imagen activa a lectores de pantalla", () => {
     render(<ImageCarousel images={images} label="Obras" sizes="100vw" />);
@@ -46,23 +49,26 @@ describe("ImageCarousel", () => {
     expect(visibleImage()).toHaveAccessibleName("Segunda foto");
   });
 
-  it("avanza solo y se detiene con el botón de pausa", () => {
-    render(<ImageCarousel images={images} label="Obras" sizes="100vw" interval={1000} />);
+  it("avanza al completarse la barra de progreso y la congela con el botón de pausa", () => {
+    const { container } = render(
+      <ImageCarousel images={images} label="Obras" sizes="100vw" interval={1000} />,
+    );
 
-    act(() => vi.advanceTimersByTime(1000));
+    expect(container.querySelector<HTMLElement>("[data-carousel-progress]")!.style.animation).toContain("1000ms");
+    expect(progressState(container)).toBe("running");
+    finishProgress(container);
     expect(visibleImage()).toHaveAccessibleName("Segunda foto");
 
     fireEvent.click(screen.getByRole("button", { name: "Pausar carrusel" }));
-    act(() => vi.advanceTimersByTime(3000));
-    expect(visibleImage()).toHaveAccessibleName("Segunda foto");
+    expect(progressState(container)).toBe("paused");
     expect(screen.getByRole("button", { name: "Reanudar carrusel" })).toBeInTheDocument();
   });
 
-  it("no avanza solo si el sistema pide reducir el movimiento", () => {
+  it("no anima la barra si el sistema pide reducir el movimiento", () => {
     mockReducedMotion(true);
-    render(<ImageCarousel images={images} label="Obras" sizes="100vw" interval={1000} />);
+    const { container } = render(<ImageCarousel images={images} label="Obras" sizes="100vw" />);
 
-    act(() => vi.advanceTimersByTime(3000));
+    expect(container.querySelector<HTMLElement>("[data-carousel-progress]")!.style.animation).toBe("");
     expect(visibleImage()).toHaveAccessibleName("Primera foto");
   });
 });

@@ -22,7 +22,7 @@ export function Header({ name, logo, navigation, cta }: Props) {
       <Container className="flex h-16 items-center justify-between gap-6">
         <Link href="/" className="flex items-center gap-2 text-lg font-bold tracking-tight">
           {logo ? (
-            <Image src={logo} alt={name} width={140} height={40} className="h-10 w-auto" priority />
+            <Image src={logo} alt={name} width={160} height={32} className="h-8 w-40" priority />
           ) : (
             name
           )}

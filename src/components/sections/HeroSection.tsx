@@ -17,7 +17,7 @@ export function HeroSection({ content, fallbackLabel }: Props) {
       <Container className="grid items-center gap-12 lg:grid-cols-2">
         <div>
           {eyebrow && (
-            <p className="mb-4 text-sm font-semibold tracking-wider text-accent uppercase">{eyebrow}</p>
+            <p className="mb-4 text-sm font-semibold tracking-wider text-accent-text uppercase">{eyebrow}</p>
           )}
           <h1 className="text-4xl font-bold tracking-tight text-balance sm:text-5xl lg:text-6xl">
             {title}

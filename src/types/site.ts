@@ -40,6 +40,8 @@ export type ThemeColors = {
   primaryForeground: string;
   accent: string;
   accentForeground: string;
+  /** Acento usado como texto sobre background y surface: versión más oscura de accent que cumple 4.5:1. */
+  accentText: string;
   background: string;
   foreground: string;
   /** Fondo de tarjetas y secciones alternas. */
@@ -78,4 +80,11 @@ export type SiteConfig = {
   sections: Record<SectionKey, boolean>;
   /** Títulos visibles de cada sección, adaptados al rubro. */
   labels: Record<SectionKey, string>;
+  /** Textos de botones adaptados al rubro. Sin valor, se usa un texto genérico. */
+  actions?: {
+    /** Botón principal hacia contacto (header y cierre de cada trabajo), ej: "Cotiza tu proyecto". */
+    quote?: string;
+    /** Enlace del home al listado completo de trabajos, ej: "Ver todas las obras". */
+    allProjects?: string;
+  };
 };

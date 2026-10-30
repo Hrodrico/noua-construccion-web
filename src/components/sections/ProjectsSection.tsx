@@ -9,13 +9,15 @@ type Props = {
   id: string;
   label: string;
   projects: Project[];
-  /** Muestra el enlace "Ver todos" hacia /trabajos. */
+  /** Muestra el enlace hacia /trabajos. */
   showAllLink?: boolean;
+  /** Texto del enlace al listado completo. */
+  showAllLabel?: string;
   /** Se muestra sobre el título (ej: ruta de navegación en la página del listado). */
   breadcrumbs?: ReactNode;
 };
 
-export function ProjectsSection({ id, label, projects, showAllLink = true, breadcrumbs }: Props) {
+export function ProjectsSection({ id, label, projects, showAllLink = true, showAllLabel = "Ver todos", breadcrumbs }: Props) {
   if (projects.length === 0) return null;
 
   return (
@@ -33,7 +35,7 @@ export function ProjectsSection({ id, label, projects, showAllLink = true, bread
         {showAllLink && (
           <div className="mt-10">
             <ButtonLink href="/trabajos" variant="outline">
-              Ver todos
+              {showAllLabel}
             </ButtonLink>
           </div>
         )}

@@ -58,6 +58,17 @@ export function ContactSection({ id, label, contact }: Props) {
             <Item icon={<PhoneIcon className={iconClass} />} title="Teléfono">
               <a href={phoneUrl(phone)} className="hover:underline">{phone}</a>
             </Item>
+          )}          
+          {hours && hours.length > 0 && (
+            <Item icon={<ClockIcon className={iconClass} />} title="Horario">
+              <ul>
+                {hours.map((h) => (
+                  <li key={h.label}>
+                    {h.label}: <span className="text-muted">{h.value}</span>
+                  </li>
+                ))}
+              </ul>
+            </Item>
           )}
           {location && (
             <Item icon={<MapPinIcon className={iconClass} />} title="Ubicación">
@@ -68,17 +79,6 @@ export function ContactSection({ id, label, contact }: Props) {
               ) : (
                 location
               )}
-            </Item>
-          )}
-          {hours && hours.length > 0 && (
-            <Item icon={<ClockIcon className={iconClass} />} title="Horario">
-              <ul>
-                {hours.map((h) => (
-                  <li key={h.label}>
-                    {h.label}: <span className="text-muted">{h.value}</span>
-                  </li>
-                ))}
-              </ul>
             </Item>
           )}
         </ul>

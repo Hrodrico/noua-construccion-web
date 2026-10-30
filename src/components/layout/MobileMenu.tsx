@@ -20,7 +20,7 @@ export function MobileMenu({ navigation }: Props) {
         aria-expanded={open}
         aria-controls="mobile-menu"
         aria-label={open ? "Cerrar menú" : "Abrir menú"}
-        className="flex h-10 w-10 items-center justify-center rounded-md"
+        className="flex h-11 w-11 items-center justify-center rounded-md"
       >
         {open ? <CloseIcon className="h-6 w-6" /> : <MenuIcon className="h-6 w-6" />}
       </button>

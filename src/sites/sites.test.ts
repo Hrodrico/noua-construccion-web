@@ -39,6 +39,8 @@ describe.each(Object.entries(sites))("sitio %s", (_, { config, content }) => {
       ["muted", "background"],
       ["primaryForeground", "primary"],
       ["accentForeground", "accent"],
+      ["accentText", "background"],
+      ["accentText", "surface"],
     ] as const)("contraste %s sobre %s >= 4.5 (WCAG AA)", (text, bg) => {
       expect(contrast(config.theme[text], config.theme[bg])).toBeGreaterThanOrEqual(4.5);
     });

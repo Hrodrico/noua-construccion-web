@@ -24,7 +24,7 @@ export function SocialLinks({ links, label, className = "" }: Props) {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={socialNames[network]}
-                className="flex h-10 w-10 items-center justify-center rounded-full text-accent transition hover:bg-current/10"
+                className="flex h-11 w-11 items-center justify-center rounded-full text-accent transition hover:bg-current/10"
               >
                 <Icon className="h-6 w-6" />
               </a>
