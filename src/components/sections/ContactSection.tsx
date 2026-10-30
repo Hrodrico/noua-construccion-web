@@ -1,17 +1,15 @@
 import type { ReactNode } from "react";
-import type { ContactInfo, SocialLink } from "@/types/site";
+import type { ContactInfo } from "@/types/site";
 import { emailUrl, phoneUrl, whatsappUrl } from "@/lib/contact";
 import { Container } from "@/components/layout/Container";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { ClockIcon, MailIcon, MapPinIcon, PhoneIcon, WhatsappIcon } from "@/components/ui/icons";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { SocialLinks } from "@/components/ui/SocialLinks";
 
 type Props = {
   id: string;
   label: string;
   contact: ContactInfo;
-  social: SocialLink[];
 };
 
 function Item({ icon, title, children }: { icon: ReactNode; title: string; children: ReactNode }) {
@@ -28,7 +26,7 @@ function Item({ icon, title, children }: { icon: ReactNode; title: string; child
   );
 }
 
-export function ContactSection({ id, label, contact, social }: Props) {
+export function ContactSection({ id, label, contact }: Props) {
   const { phone, email, whatsapp, address, city, mapUrl, hours } = contact;
   const location = [address, city].filter(Boolean).join(", ");
   const iconClass = "h-5 w-5";
@@ -43,23 +41,33 @@ export function ContactSection({ id, label, contact, social }: Props) {
             description="Escríbenos y te responderemos a la brevedad."
           />
           {whatsapp && (
-            <ButtonLink href={whatsappUrl(whatsapp)} external variant="accent">
+            <ButtonLink href={whatsappUrl(whatsapp)} external variant="whatsapp">
               <WhatsappIcon className={iconClass} />
               Escríbenos por WhatsApp
             </ButtonLink>
           )}
-          <SocialLinks links={social} className="mt-8" />
         </div>
 
-        <ul className="space-y-6">
+        <ul className="space-y-6">          
+          {email && (
+            <Item icon={<MailIcon className={iconClass} />} title="Correo">
+              <a href={emailUrl(email)} className="hover:underline">{email}</a>
+            </Item>
+          )}
           {phone && (
             <Item icon={<PhoneIcon className={iconClass} />} title="Teléfono">
               <a href={phoneUrl(phone)} className="hover:underline">{phone}</a>
             </Item>
-          )}
-          {email && (
-            <Item icon={<MailIcon className={iconClass} />} title="Correo">
-              <a href={emailUrl(email)} className="hover:underline">{email}</a>
+          )}          
+          {hours && hours.length > 0 && (
+            <Item icon={<ClockIcon className={iconClass} />} title="Horario">
+              <ul>
+                {hours.map((h) => (
+                  <li key={h.label}>
+                    {h.label}: <span className="text-muted">{h.value}</span>
+                  </li>
+                ))}
+              </ul>
             </Item>
           )}
           {location && (
@@ -71,17 +79,6 @@ export function ContactSection({ id, label, contact, social }: Props) {
               ) : (
                 location
               )}
-            </Item>
-          )}
-          {hours && hours.length > 0 && (
-            <Item icon={<ClockIcon className={iconClass} />} title="Horario">
-              <ul>
-                {hours.map((h) => (
-                  <li key={h.label}>
-                    {h.label}: <span className="text-muted">{h.value}</span>
-                  </li>
-                ))}
-              </ul>
             </Item>
           )}
         </ul>

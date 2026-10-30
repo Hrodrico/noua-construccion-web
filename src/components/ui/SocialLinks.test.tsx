@@ -17,4 +17,11 @@ describe("SocialLinks", () => {
     expect(link).toHaveAttribute("rel", "noopener noreferrer");
     expect(link).toHaveAccessibleName();
   });
+
+  it("muestra el texto antes de los íconos", () => {
+    render(
+      <SocialLinks label="Síguenos" links={[{ network: "instagram", url: "https://instagram.com/negocio" }]} />,
+    );
+    expect(screen.getByText("Síguenos")).toBeInTheDocument();
+  });
 });

@@ -31,7 +31,12 @@ export default async function HomePage() {
         <ServicesSection id={sectionIds.services} label={labels.services} services={services} />
       )}
       {sections.projects && (
-        <ProjectsSection id={sectionIds.projects} label={labels.projects} projects={projects} />
+        <ProjectsSection
+          id={sectionIds.projects}
+          label={labels.projects}
+          projects={projects}
+          showAllLabel={site.actions?.allProjects}
+        />
       )}
       {sections.reviews && (
         <ReviewsSection id={sectionIds.reviews} label={labels.reviews} reviews={reviews} />
@@ -41,7 +46,6 @@ export default async function HomePage() {
           id={sectionIds.contact}
           label={labels.contact}
           contact={site.contact}
-          social={site.social}
         />
       )}
     </>

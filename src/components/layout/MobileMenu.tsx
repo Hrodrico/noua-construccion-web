@@ -20,7 +20,7 @@ export function MobileMenu({ navigation }: Props) {
         aria-expanded={open}
         aria-controls="mobile-menu"
         aria-label={open ? "Cerrar menú" : "Abrir menú"}
-        className="flex h-10 w-10 items-center justify-center rounded-md"
+        className="flex h-11 w-11 items-center justify-center rounded-md"
       >
         {open ? <CloseIcon className="h-6 w-6" /> : <MenuIcon className="h-6 w-6" />}
       </button>
@@ -37,7 +37,7 @@ export function MobileMenu({ navigation }: Props) {
                 <Link
                   href={item.href}
                   onClick={() => setOpen(false)}
-                  className="block py-3 text-base font-medium"
+                  className="-mx-2 block rounded-lg px-2 py-3 text-base font-medium transition hover:bg-foreground/10"
                 >
                   {item.label}
                 </Link>

@@ -29,16 +29,9 @@ jobs:
       - run: npm test
 
   e2e:
-    name: Build y E2E (${{ matrix.site }})
+    name: Build y E2E
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    strategy:
-      fail-fast: false
-      matrix:
-        # En un clon de cliente, deja solo su sitio (o elimina la matriz y SITE_ID).
-        site: [construction, barbershop]
-    env:
-      SITE_ID: ${{ matrix.site }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -52,12 +45,12 @@ jobs:
       - uses: actions/upload-artifact@v7
         if: failure()
         with:
-          name: playwright-report-${{ matrix.site }}
+          name: playwright-report
           path: playwright-report/
           retention-days: 7
 
-  # Check único para la protección de main: su nombre no cambia aunque cambie la matriz,
-  # así la base y cada clon exigen los mismos checks.
+  # Check único para la protección de main (.github/rulesets/main.json): mismo nombre
+  # que en la base, así el ruleset no cambia aunque cambien los jobs.
   ci-complete:
     name: CI completo
     if: always()

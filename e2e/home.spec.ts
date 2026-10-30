@@ -34,6 +34,18 @@ test.describe("home", () => {
       /^https:\/\/wa\.me\/\d+/,
     );
   });
+
+  test("el WhatsApp flotante se oculta mientras se ve la sección de contacto", async ({ page }) => {
+    test.skip(!config.contact.whatsapp || !config.sections.contact, "Sin WhatsApp o sin contacto");
+    const floating = page.getByRole("link", { name: "Escribir por WhatsApp" });
+    await expect(floating).toBeVisible();
+
+    await page.locator(`section#${sectionIds.contact}`).scrollIntoViewIfNeeded();
+    await expect(floating).toBeHidden();
+
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await expect(floating).toBeVisible();
+  });
 });
 
 test.describe("navegación móvil", () => {

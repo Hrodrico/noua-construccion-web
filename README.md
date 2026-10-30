@@ -1,23 +1,19 @@
-# Business Web Starter
+# Noua Construcción
 
-Base reutilizable para crear el sitio web de un negocio con **Next.js**, **TypeScript** y **Tailwind CSS**, desplegada en **Vercel**.
+Sitio web de **Noua Construcción**: terrazas, quinchos, piscinas, ampliaciones y remodelaciones. Hecho con **Next.js**, **TypeScript** y **Tailwind CSS**, desplegado en **Vercel**.
 
-Trae lo que todo negocio necesita desde el día uno: **home, servicios, trabajos realizados con reseñas, contacto (WhatsApp, teléfono, correo) y redes sociales**. Cada proyecto nuevo (construcción, barbería, mecánica, fletes, e-commerce…) parte clonando este repositorio y crece por su cuenta: uno puede quedarse como sitio informativo y otro sumar login, agenda o carrito.
+- Instagram: [@noua.contacto](https://www.instagram.com/noua.contacto/)
+- Teléfono / WhatsApp: +56 9 7399 4163
 
-## Cómo se usa
+Parte de la base [`business-web-starter`](https://github.com/Hrodrico/business-web-starter), con el historial enlazado. Para traer mejoras de la base:
 
-```text
-business-web-starter          ← esta base (GitHub Template repository)
-   ├── noua-construccion-web  ← sitio informativo
-   ├── barberia-xxx-app       ← + login y seguimiento de atención
-   └── ...
+```bash
+git fetch base
+git switch -c chore/sync-base
+git merge base/main      # resolver conflictos en lo personalizado (src/sites, CI, README)
 ```
 
-1. En GitHub: **Use this template → Create a new repository** (ej: `noua-construccion-web`).
-2. Personaliza la configuración y el contenido del negocio (ver más abajo).
-3. Conecta el repositorio nuevo a Vercel y asigna el dominio.
-
-Los clones no se sincronizan con la base. Si mejoras algo aquí, cópialo manualmente a los proyectos que lo necesiten.
+Luego abre un PR y fusiónalo con **Create a merge commit** (no squash ni rebase).
 
 ## Stack
 
@@ -38,13 +34,6 @@ npm run start      # sirve el build
 npm run lint
 ```
 
-La base incluye dos negocios de ejemplo para comprobar que todo cambia sin tocar componentes:
-
-```bash
-npm run dev                          # construction (por defecto)
-SITE_ID=barbershop npm run dev       # barbería de ejemplo
-```
-
 ## Tests
 
 ```bash
@@ -56,22 +45,14 @@ npm run test:e2e                  # E2E (Playwright) contra el build de producci
 
 - Los tests unitarios viven **junto a cada archivo** (`Rating.tsx` + `Rating.test.tsx`).
 - Los E2E viven en `e2e/` y recorren el sitio en móvil y escritorio.
-- `src/sites/sites.test.ts` valida el contenido de cada negocio: slugs, fechas, reseñas, textos `alt` y el contraste de los colores del tema.
-- Los tests no dependen de un negocio: `SITE_ID=barbershop npm run test:e2e` prueba la otra demo.
+- `src/sites/sites.test.ts` valida el contenido del sitio: slugs, fechas, reseñas, textos `alt` y el contraste de los colores del tema.
+- Los tests no tienen textos del negocio escritos: leen el contenido activo, así no se rompen al cambiar textos.
 
 ### Integración continua
 
-`.github/workflows/ci.yml` corre en GitHub Actions en cada push a `main` y en cada pull request: lint y tests unitarios, build + E2E por cada negocio de `src/sites`, y al final el job **CI completo**, que solo pasa si todo lo anterior pasó. Si falla un E2E, el reporte de Playwright queda como artefacto del run.
+`.github/workflows/ci.yml` corre en GitHub Actions en cada push a `main` y en cada pull request: lint y tests unitarios, build + E2E, y al final el job **CI completo**, que solo pasa si todo lo anterior pasó. Si falla un E2E, el reporte de Playwright queda como artefacto del run.
 
-Vercel no ejecuta los tests: solo hace el build y publica. Para que no llegue nada roto a `main` (y por tanto a producción), protege la rama en GitHub. Hazlo en **cada repo** (la base y cada clon), porque "Use this template" copia los archivos pero no la configuración de GitHub:
-
-1. **Settings → Rules → Rulesets → New branch ruleset**, con `main` como rama objetivo.
-2. Activa **Require a pull request before merging** y **Block force pushes**.
-3. Activa **Require status checks to pass** y agrega (escribiendo el nombre en el buscador) **`Lint y tests unitarios`** y **`CI completo`**. Activa también **Require branches to be up to date before merging**.
-
-Exige solo esos dos checks: los de build + E2E cambian de nombre según la matriz, y `CI completo` ya los cubre.
-
-En un clon de cliente, deja en la matriz `site` del workflow solo el sitio del cliente; la regla de protección no cambia.
+Vercel no ejecuta los tests: solo hace el build y publica. Para que no llegue nada roto a `main` (y por tanto a producción), la rama se protege con el ruleset versionado en [`.github/rulesets/main.json`](.github/rulesets/main.json): **Settings → Rules → Rulesets → New ruleset → Import a ruleset**. Exige PR, bloquea force push y borrado, pide la rama al día y los checks **`Lint y tests unitarios`** y **`CI completo`** (que cubre el build + E2E).
 
 ## Estructura
 
@@ -97,14 +78,13 @@ src/
     navigation.ts            Menú derivado de las secciones activas
     theme.ts                 Colores → variables CSS
   sites/
-    index.ts                 Registro de negocios y selección por SITE_ID
+    index.ts                 Registro del negocio activo
     construction/            config.ts + content.ts (Noua Construcción)
-    barbershop/              config.ts + content.ts (demo)
   types/
     site.ts                  Contrato de configuración (SiteConfig)
     content.ts               Contrato de contenido (Project, Review, Service…)
 public/
-  images/projects/           Fotos de trabajos
+  images/projects/           Fotos de trabajos: <año>/<slug>/<foto>.webp
   logos/
 ```
 
@@ -115,34 +95,43 @@ public/
 - **Los colores se definen una sola vez** en `config.ts` y llegan a Tailwind como clases: `bg-primary`, `text-muted`, `border-border`, `bg-surface`, `text-accent`, etc.
 - **Vocabulario genérico en el código, etiquetas en la config.** En el código se habla de `projects`, `services` y `reviews`; lo que ve el usuario sale de `labels` ("Obras realizadas", "Nuestros cortes"…).
 
-## Personalizar un negocio
+## Editar el contenido
 
-### 1. Configuración: `src/sites/<negocio>/config.ts`
+### 1. Configuración: `src/sites/construction/config.ts`
 
 Nombre, descripción, dominio (`url`), idioma, contacto (teléfono, correo, WhatsApp con mensaje precargado, dirección, mapa, horarios), redes sociales, logo, colores, SEO, **secciones activas** y **etiquetas** de cada sección. El tipo `SiteConfig` marca qué es obligatorio.
 
-### 2. Contenido: `src/sites/<negocio>/content.ts`
+### 2. Contenido: `src/sites/construction/content.ts`
 
 Hero, quiénes somos, servicios, trabajos realizados (con galería) y reseñas. Una reseña se asocia a un trabajo con `projectSlug` y aparece en su página de detalle.
 
 ### 3. Imágenes
 
-Copia las fotos a `public/images/...` (formato `.webp` o `.jpg`) y referéncialas en el contenido:
+Las fotos de obras van en una carpeta por año y por obra, con el mismo `slug` del trabajo en `content.ts`:
+
+```text
+public/images/projects/
+  2026/
+    cierre-patio-revestimiento/
+      antes.webp
+      despues.webp
+    quincho-cocina-barra/
+      cocina-barra.webp
+```
 
 ```ts
-cover: { src: "/images/projects/cocina-nunoa.webp", alt: "Cocina remodelada con isla central" },
+cover: { src: "/images/projects/2026/quincho-cocina-barra/cocina-barra.webp", alt: "Quincho con cocina y barra" },
 ```
+
+- **Año:** el de la obra; si el trabajo tiene `date`, debe coincidir.
+- **Nombre de la foto:** minúsculas, sin tildes ni espacios, y que diga qué muestra (`antes`, `despues`, `radier-abierto`).
+- **Formato:** `.webp` (o `.jpg`), de unos 1600 px por lado como máximo.
+
+`src/sites/sites.test.ts` verifica que cada foto exista y que respete esta estructura.
 
 Mientras no haya foto, se muestra un marcador con los colores del tema. El logo va en `public/logos/` y se configura en `branding.logo`. Reemplaza también `src/app/favicon.ico`.
 
-### 4. Dejar un solo negocio en el clon
-
-En el repositorio del cliente:
-
-1. Borra las carpetas de `src/sites/` que no correspondan.
-2. En `src/sites/index.ts`, deja registrado solo ese negocio y ajusta `DEFAULT_SITE`.
-
-## Cómo crecer en un proyecto (fuera de la base)
+## Cómo crecer
 
 | Necesidad | Dónde |
 | --- | --- |
@@ -155,8 +144,7 @@ En el repositorio del cliente:
 ## Despliegue en Vercel
 
 1. Importa el repositorio en Vercel (detecta Next.js automáticamente).
-2. Si el repositorio aún tiene varios negocios, define la variable `SITE_ID`.
-3. Asigna el dominio y actualiza `url` en la configuración del negocio.
+2. Asigna el dominio y actualiza `url` en la configuración del negocio.
 
 ## Antes de publicar
 

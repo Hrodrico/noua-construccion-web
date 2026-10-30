@@ -15,19 +15,19 @@ type Props = {
 
 export function Footer({ name, tagline, navigation, social, contactLines, year }: Props) {
   return (
-    <footer className="bg-primary text-primary-foreground">
+    <footer className="focus-on-dark bg-primary text-primary-foreground">
       <Container className="grid gap-10 py-12 md:grid-cols-3">
         <div>
           <p className="text-lg font-bold">{name}</p>
           <p className="mt-2 text-sm opacity-80">{tagline}</p>
-          <SocialLinks links={social} className="mt-6" />
+          <SocialLinks links={social} label="Síguenos" className="mt-6" />
         </div>
 
         <nav aria-label="Pie de página">
-          <ul className="space-y-2 text-sm">
+          <ul className="text-sm">
             {navigation.map((item) => (
               <li key={item.href}>
-                <Link href={item.href} className="opacity-80 transition hover:opacity-100">
+                <Link href={item.href} className="inline-block py-3 opacity-80 transition hover:opacity-100">
                   {item.label}
                 </Link>
               </li>

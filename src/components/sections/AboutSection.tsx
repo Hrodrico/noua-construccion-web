@@ -1,5 +1,6 @@
 import type { AboutContent } from "@/types/content";
 import { Container } from "@/components/layout/Container";
+import { Media } from "@/components/ui/Media";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
 type Props = {
@@ -21,7 +22,7 @@ export function AboutSection({ id, label, content }: Props) {
           </div>
         </div>
 
-        {content.highlights && content.highlights.length > 0 && (
+        {content.highlights && content.highlights.length > 0 ? (
           <dl className="grid grid-cols-2 gap-6 self-center">
             {content.highlights.map((item) => (
               <div key={item.label} className="rounded-2xl border border-border bg-background p-6">
@@ -30,6 +31,15 @@ export function AboutSection({ id, label, content }: Props) {
               </div>
             ))}
           </dl>
+        ) : (
+          content.image && (
+            <Media
+              image={content.image}
+              fallbackLabel={content.title}
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className="aspect-[4/3] self-center rounded-3xl"
+            />
+          )
         )}
       </Container>
     </section>

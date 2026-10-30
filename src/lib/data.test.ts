@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { activeSite } from "@/sites";
 import { getProject, getProjects, getReviews } from "./data";
 
-// Las aserciones se derivan del contenido del negocio activo para no depender de un SITE_ID.
+// Las aserciones se derivan del contenido activo para no escribir textos del negocio en el test.
 const { content } = activeSite;
 
 describe("getProjects", () => {

@@ -1,3 +1,5 @@
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { sites } from "./index";
 
@@ -37,6 +39,8 @@ describe.each(Object.entries(sites))("sitio %s", (_, { config, content }) => {
       ["muted", "background"],
       ["primaryForeground", "primary"],
       ["accentForeground", "accent"],
+      ["accentText", "background"],
+      ["accentText", "surface"],
     ] as const)("contraste %s sobre %s >= 4.5 (WCAG AA)", (text, bg) => {
       expect(contrast(config.theme[text], config.theme[bg])).toBeGreaterThanOrEqual(4.5);
     });
@@ -84,7 +88,7 @@ describe.each(Object.entries(sites))("sitio %s", (_, { config, content }) => {
 
     it("describe todas las imágenes con alt", () => {
       const images = [
-        content.hero.image,
+        ...(content.hero.images ?? []),
         content.about.image,
         ...content.services.map((s) => s.image),
         ...content.projects.flatMap((p) => [p.cover, ...p.gallery]),
@@ -92,6 +96,30 @@ describe.each(Object.entries(sites))("sitio %s", (_, { config, content }) => {
 
       for (const image of images) {
         expect(image.alt.trim()).not.toBe("");
+      }
+    });
+
+    it("usa imágenes locales que existen en /public", () => {
+      const images = [
+        ...(content.hero.images ?? []),
+        content.about.image,
+        ...content.services.map((s) => s.image),
+        ...content.projects.flatMap((p) => [p.cover, ...p.gallery]),
+      ].filter((image) => image !== undefined);
+
+      for (const image of images.filter((i) => i.src.startsWith("/"))) {
+        expect(existsSync(join(process.cwd(), "public", image.src)), image.src).toBe(true);
+      }
+    });
+
+    // Fotos de obras en /images/projects/<año>/<slug>/<foto>, para que la carpeta crezca ordenada.
+    it("guarda las fotos de cada trabajo en su carpeta <año>/<slug>", () => {
+      for (const project of content.projects) {
+        const year = project.date?.slice(0, 4) ?? "\\d{4}";
+        const folder = new RegExp(`^/images/projects/${year}/${project.slug}/[a-z0-9-]+\\.(webp|jpe?g|png|avif)$`);
+        for (const image of [project.cover, ...project.gallery].filter((i) => i !== undefined)) {
+          if (image.src.startsWith("/")) expect(image.src).toMatch(folder);
+        }
       }
     });
   });

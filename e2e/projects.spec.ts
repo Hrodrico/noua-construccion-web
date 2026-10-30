@@ -30,4 +30,34 @@ test.describe("trabajos", () => {
     await page.getByRole("link", { name: project.title }).click();
     await expect(page).toHaveURL(`/trabajos/${project.slug}`);
   });
+
+  test("la galería se desliza arrastrando", async ({ page }) => {
+    const project = content.projects.find(
+      (item) => new Set([item.cover?.src, ...item.gallery.map((image) => image.src)]).size > 1,
+    );
+    test.skip(!project, "Ningún trabajo tiene más de una foto");
+
+    await page.goto(`/trabajos/${project!.slug}`);
+    const stage = page.getByRole("button", { name: /^Ver en pantalla completa/ });
+    const box = (await stage.boundingBox())!;
+    const y = box.y + box.height / 2;
+    const counter = page.getByText(/^1 \/ \d+$/);
+    await expect(counter).toBeVisible();
+
+    // Arrastre lento y corto: vuelve a su lugar.
+    await page.mouse.move(box.x + box.width * 0.6, y);
+    await page.mouse.down();
+    await page.mouse.move(box.x + box.width * 0.5, y, { steps: 10 });
+    await page.waitForTimeout(200);
+    await page.mouse.up();
+    await expect(counter).toBeVisible();
+
+    // Arrastre de más de media imagen: pasa a la siguiente sin abrir la pantalla completa.
+    await page.mouse.move(box.x + box.width * 0.9, y);
+    await page.mouse.down();
+    await page.mouse.move(box.x + box.width * 0.2, y, { steps: 10 });
+    await page.mouse.up();
+    await expect(page.getByText(/^2 \/ \d+$/)).toBeVisible();
+    await expect(page.getByRole("dialog")).toBeHidden();
+  });
 });
