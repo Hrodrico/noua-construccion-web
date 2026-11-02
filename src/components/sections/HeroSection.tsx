@@ -13,7 +13,8 @@ export function HeroSection({ content, fallbackLabel }: Props) {
   const { eyebrow, title, description, images, primaryCta, secondaryCta } = content;
 
   return (
-    <section className="py-16 sm:py-24">
+    // En escritorio el hero ocupa la pantalla bajo el header (h-16): la siguiente sección no asoma al entrar.
+    <section className="flex items-center py-16 sm:py-24 lg:min-h-[calc(100svh-4rem)]">
       <Container className="grid items-center gap-12 lg:grid-cols-2">
         <div>
           {eyebrow && (

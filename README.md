@@ -2,6 +2,8 @@
 
 Sitio web de **Noua Construcción**: terrazas, quinchos, piscinas, ampliaciones y remodelaciones. Hecho con **Next.js**, **TypeScript** y **Tailwind CSS**, desplegado en **Vercel**.
 
+![Vista previa del sitio en móvil y escritorio](docs/preview.png)
+
 - Instagram: [@noua.contacto](https://www.instagram.com/noua.contacto/)
 - Teléfono / WhatsApp: +56 9 7399 4163
 

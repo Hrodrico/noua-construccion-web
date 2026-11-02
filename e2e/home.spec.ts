@@ -12,6 +12,15 @@ test.describe("home", () => {
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(content.hero.title);
   });
 
+  test("en escritorio el hero ocupa la primera pantalla", async ({ page, isMobile }) => {
+    test.skip(isMobile, "Solo aplica en escritorio");
+    const next = page.locator("main > section").nth(1);
+    test.skip((await next.count()) === 0, "No hay sección después del hero");
+    const viewport = page.viewportSize();
+    const top = (await next.boundingBox())?.y ?? 0;
+    expect(top).toBeGreaterThanOrEqual(viewport?.height ?? 0);
+  });
+
   test("renderiza solo las secciones activas", async ({ page }) => {
     for (const [key, id] of Object.entries(sectionIds)) {
       const enabled = config.sections[key as keyof typeof sectionIds];
