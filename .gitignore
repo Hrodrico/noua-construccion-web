@@ -49,3 +49,7 @@ next-env.d.ts
 
 # ajustes personales del editor
 .vscode/
+
+# herramientas locales de Claude Code y graphify (no se versionan)
+/.claude/
+/graphify-out/
