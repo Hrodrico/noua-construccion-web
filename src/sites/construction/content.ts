@@ -38,7 +38,7 @@ export const content: SiteContent = {
       "Trabajamos con personal calificado, cumplimos los plazos que acordamos y garantizamos nuestros trabajos. Te acompañamos desde la idea hasta la entrega con atención personalizada.",
     ],
     image: {
-      src: "/images/about/afiche-noua.webp",
+      src: "/images/about/afiche-servicios.webp",
       alt: "Afiche de Noua con sus servicios: construcción y ampliaciones, logias, terrazas y piscinas, estacionamientos, muebles a medida, remodelaciones y mantenciones",
     },
     imageOrientation: "portrait",
