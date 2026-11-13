@@ -24,7 +24,8 @@ export function Footer({ name, tagline, navigation, social, contactLines, year }
         </div>
 
         <nav aria-label="Pie de página">
-          <ul className="text-sm">
+          {/* -mt-3 compensa el py-3 de los enlaces (área táctil) para alinear el primero con las otras columnas. */}
+          <ul className="-mt-3 text-sm">
             {navigation.map((item) => (
               <li key={item.href}>
                 <Link href={item.href} className="inline-block py-3 opacity-80 transition hover:opacity-100">
