@@ -53,7 +53,7 @@ export function ImageGallery({ images, label, className = "" }: Props) {
         onChange={go}
         sizes="(min-width: 1152px) 1152px, 100vw"
         className="aspect-[16/9] rounded-3xl bg-surface"
-        imageClassName="object-cover"
+        imageClassName="object-cover dark:brightness-95"
         highPriorityFirst
       >
         <button
@@ -89,7 +89,7 @@ export function ImageGallery({ images, label, className = "" }: Props) {
                   index === current ? "border-accent" : "border-transparent opacity-70 hover:opacity-100"
                 }`}
               >
-                <Image src={thumb.src} alt="" fill sizes="160px" className="object-cover" />
+                <Image src={thumb.src} alt="" fill sizes="160px" className="object-cover dark:brightness-95" />
               </button>
             </li>
           ))}
@@ -104,7 +104,8 @@ export function ImageGallery({ images, label, className = "" }: Props) {
           if (event.key === "ArrowRight") go(current + 1);
           if (event.key === "ArrowLeft") go(current - 1);
         }}
-        className="m-0 h-dvh max-h-none w-screen max-w-none bg-foreground p-0 text-background backdrop:bg-foreground"
+        // El visor siempre es oscuro: en modo oscuro foreground es claro, por eso se invierte.
+        className="m-0 h-dvh max-h-none w-screen max-w-none bg-foreground p-0 text-background backdrop:bg-foreground dark:bg-background dark:text-foreground dark:backdrop:bg-background"
       >
         {expanded && (
           <div className="flex h-full w-full flex-col">

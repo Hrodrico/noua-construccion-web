@@ -24,7 +24,8 @@ export function Media({ image, fallbackLabel, sizes, priority, className = "aspe
           fill
           sizes={sizes}
           priority={priority}
-          className="object-cover"
+          // En modo oscuro las fotos claras brillan sobre el fondo: se atenúan levemente.
+          className="object-cover dark:brightness-95"
         />
       ) : (
         <div

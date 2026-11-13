@@ -39,7 +39,7 @@ export function AboutSection({ id, label, content }: Props) {
               sizes={content.imageOrientation === "portrait" ? "384px" : "(min-width: 1024px) 50vw, 100vw"}
               className={
                 content.imageOrientation === "portrait"
-                  ? "mx-auto aspect-[3/4] w-full max-w-sm self-center rounded-3xl"
+                  ? "mx-auto aspect-[3/4] w-full max-w-sm self-center rounded-3xl dark:brightness-95"
                   : "aspect-[4/3] self-center rounded-3xl"
               }
             />

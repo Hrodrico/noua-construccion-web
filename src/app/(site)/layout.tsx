@@ -36,7 +36,14 @@ export default async function SiteLayout({ children }: LayoutProps<"/">) {
         Saltar al contenido
       </a>
       <HashlessSectionLinks />
-      <Header name={site.name} logo={site.branding.logo} navigation={navigation} cta={cta} />
+      <Header
+        name={site.name}
+        logo={site.branding.logo}
+        logoDark={site.themeDark ? site.branding.logoDark : undefined}
+        navigation={navigation}
+        cta={cta}
+        themeToggle={Boolean(site.themeDark)}
+      />
       <main id="contenido" className="flex-1">
         {children}
       </main>

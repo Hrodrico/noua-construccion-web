@@ -15,7 +15,8 @@ type Props = {
 
 export function Footer({ name, tagline, navigation, social, contactLines, year }: Props) {
   return (
-    <footer className="focus-on-dark bg-primary text-primary-foreground">
+    // En modo oscuro el primary (azul de botones) es muy llamativo para un bloque grande: usa surface.
+    <footer className="focus-on-dark bg-primary text-primary-foreground dark:border-t dark:border-border dark:bg-surface dark:text-foreground">
       <Container className="grid gap-10 py-12 md:grid-cols-3">
         <div>
           <p className="text-lg font-bold">{name}</p>

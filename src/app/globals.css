@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Variante dark: según la clase .dark en <html> (la pone el script de tema), no solo el sistema. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /*
  * Valores de respaldo. Los colores reales se inyectan en <html> desde la
  * configuración del negocio (src/lib/theme.ts), así este archivo no cambia
@@ -18,18 +21,57 @@
   --brand-border: #e5e7eb;
 }
 
+/*
+ * Paleta activa: la clara por defecto y la oscura (--brand-dark-*) con .dark. Es una capa
+ * intermedia porque las --brand-* van inline en <html> y una regla de CSS no las puede pisar.
+ */
+:root {
+  --palette-primary: var(--brand-primary);
+  --palette-primary-foreground: var(--brand-primary-foreground);
+  --palette-accent: var(--brand-accent);
+  --palette-accent-foreground: var(--brand-accent-foreground);
+  --palette-accent-text: var(--brand-accent-text);
+  --palette-background: var(--brand-background);
+  --palette-foreground: var(--brand-foreground);
+  --palette-surface: var(--brand-surface);
+  --palette-muted: var(--brand-muted);
+  --palette-border: var(--brand-border);
+}
+
+:root.dark {
+  --palette-primary: var(--brand-dark-primary, var(--brand-primary));
+  --palette-primary-foreground: var(--brand-dark-primary-foreground, var(--brand-primary-foreground));
+  --palette-accent: var(--brand-dark-accent, var(--brand-accent));
+  --palette-accent-foreground: var(--brand-dark-accent-foreground, var(--brand-accent-foreground));
+  --palette-accent-text: var(--brand-dark-accent-text, var(--brand-accent-text));
+  --palette-background: var(--brand-dark-background, var(--brand-background));
+  --palette-foreground: var(--brand-dark-foreground, var(--brand-foreground));
+  --palette-surface: var(--brand-dark-surface, var(--brand-surface));
+  --palette-muted: var(--brand-dark-muted, var(--brand-muted));
+  --palette-border: var(--brand-dark-border, var(--brand-border));
+}
+
+/* "Aumentar contraste" del sistema: texto secundario como el principal y bordes marcados. */
+@media (prefers-contrast: more) {
+  :root,
+  :root.dark {
+    --palette-muted: var(--palette-foreground);
+    --palette-border: color-mix(in srgb, var(--palette-foreground) 50%, transparent);
+  }
+}
+
 /* Clases de Tailwind: bg-primary, text-muted, border-border, etc. */
 @theme inline {
-  --color-primary: var(--brand-primary);
-  --color-primary-foreground: var(--brand-primary-foreground);
-  --color-accent: var(--brand-accent);
-  --color-accent-foreground: var(--brand-accent-foreground);
-  --color-accent-text: var(--brand-accent-text);
-  --color-background: var(--brand-background);
-  --color-foreground: var(--brand-foreground);
-  --color-surface: var(--brand-surface);
-  --color-muted: var(--brand-muted);
-  --color-border: var(--brand-border);
+  --color-primary: var(--palette-primary);
+  --color-primary-foreground: var(--palette-primary-foreground);
+  --color-accent: var(--palette-accent);
+  --color-accent-foreground: var(--palette-accent-foreground);
+  --color-accent-text: var(--palette-accent-text);
+  --color-background: var(--palette-background);
+  --color-foreground: var(--palette-foreground);
+  --color-surface: var(--palette-surface);
+  --color-muted: var(--palette-muted);
+  --color-border: var(--palette-border);
   --font-sans: var(--font-geist-sans);
 }
 
@@ -59,6 +101,15 @@ body {
 }
 
 .focus-on-dark :focus-visible {
+  outline-color: var(--color-primary-foreground);
+}
+
+/* En modo oscuro el primary no contrasta con el fondo: el foco usa el acento. */
+.dark :focus-visible {
+  outline-color: var(--color-accent);
+}
+
+.dark .focus-on-dark :focus-visible {
   outline-color: var(--color-primary-foreground);
 }
 
