@@ -20,7 +20,7 @@ async function getCurrentYear() {
 export default async function SiteLayout({ children }: LayoutProps<"/">) {
   const navigation = buildNavigation(site);
   const { phone, email, address, city, whatsapp } = site.contact;
-  const contactLines = [phone, email, [address, city].filter(Boolean).join(", ")].filter(
+  const contactLines = [email, phone, [address, city].filter(Boolean).join(", ")].filter(
     (line): line is string => Boolean(line),
   );
   const cta = site.sections.contact
