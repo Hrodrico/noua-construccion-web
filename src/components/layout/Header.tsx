@@ -35,7 +35,7 @@ export function Header({ name, logo, navigation, cta }: Props) {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className="rounded-full px-3 py-2 text-foreground/80 transition hover:bg-foreground/10 hover:text-foreground"
+                  className="rounded-full px-3 py-2 text-foreground/80 transition hover:bg-accent/15 hover:text-accent-text"
                 >
                   {item.label}
                 </Link>
