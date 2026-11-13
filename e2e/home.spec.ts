@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { sectionIds } from "../src/lib/navigation";
+import { heroId, sectionIds } from "../src/lib/navigation";
 import { config, content } from "./site";
 
 test.describe("home", () => {
@@ -38,22 +38,28 @@ test.describe("home", () => {
 
   test("el botón de WhatsApp apunta a wa.me", async ({ page }) => {
     test.skip(!config.contact.whatsapp, "El negocio no tiene WhatsApp");
-    await expect(page.getByRole("link", { name: "Escribir por WhatsApp" })).toHaveAttribute(
+    // Al cargar se ve el hero y el botón está oculto (aria-hidden): se busca incluyendo ocultos.
+    await expect(page.getByRole("link", { name: "Escribir por WhatsApp", includeHidden: true })).toHaveAttribute(
       "href",
       /^https:\/\/wa\.me\/\d+/,
     );
   });
 
-  test("el WhatsApp flotante se oculta mientras se ve la sección de contacto", async ({ page }) => {
+  test("el WhatsApp flotante se oculta mientras se ven el hero o la sección de contacto", async ({ page }) => {
     test.skip(!config.contact.whatsapp || !config.sections.contact, "Sin WhatsApp o sin contacto");
     const floating = page.getByRole("link", { name: "Escribir por WhatsApp" });
+    // Al cargar se ve el hero: el botón no debe tapar sus controles.
+    await expect(floating).toBeHidden();
+
+    // Entre el hero y contacto el botón aparece.
+    await page.evaluate((heroId) => {
+      const hero = document.getElementById(heroId);
+      if (hero) window.scrollTo(0, hero.offsetTop + hero.offsetHeight + 200);
+    }, heroId);
     await expect(floating).toBeVisible();
 
     await page.locator(`section#${sectionIds.contact}`).scrollIntoViewIfNeeded();
     await expect(floating).toBeHidden();
-
-    await page.evaluate(() => window.scrollTo(0, 0));
-    await expect(floating).toBeVisible();
   });
 });
 

@@ -6,8 +6,8 @@ import { WhatsappIcon } from "./icons";
 
 type Props = {
   href: string;
-  /** Id de una sección que ya muestra WhatsApp: mientras esté en pantalla, el botón se oculta. */
-  hideWhenVisible?: string;
+  /** Ids de secciones que tapan o repiten el botón: mientras alguna esté en pantalla, se oculta. */
+  hideWhenVisible?: string[];
 };
 
 /** Botón flotante de WhatsApp. */
@@ -17,17 +17,31 @@ export function WhatsAppButton({ href, hideWhenVisible }: Props) {
   const [overlap, setOverlap] = useState({ pathname, visible: false });
   const hidden = overlap.pathname === pathname && overlap.visible;
 
-  // El layout no se vuelve a montar al navegar: se busca la sección en cada ruta.
+  // Clave estable para el efecto: el arreglo llega nuevo en cada render del layout.
+  const ids = hideWhenVisible?.join(",") ?? "";
+
+  // El layout no se vuelve a montar al navegar: se buscan las secciones en cada ruta
+  // (las que no existen en la página actual se ignoran).
   useEffect(() => {
-    const target = hideWhenVisible ? document.getElementById(hideWhenVisible) : null;
-    if (!target) return;
+    const targets = ids
+      .split(",")
+      .map((id) => (id ? document.getElementById(id) : null))
+      .filter((el): el is HTMLElement => el !== null);
+    if (targets.length === 0) return;
+    const visible = new Set<Element>();
     const observer = new IntersectionObserver(
-      ([entry]) => setOverlap({ pathname, visible: entry.isIntersecting }),
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) visible.add(entry.target);
+          else visible.delete(entry.target);
+        }
+        setOverlap({ pathname, visible: visible.size > 0 });
+      },
       { threshold: 0.1 },
     );
-    observer.observe(target);
+    for (const target of targets) observer.observe(target);
     return () => observer.disconnect();
-  }, [hideWhenVisible, pathname]);
+  }, [ids, pathname]);
 
   return (
     <a

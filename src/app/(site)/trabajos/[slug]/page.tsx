@@ -86,7 +86,7 @@ async function ProjectDetail({ params }: { params: Params }) {
       <Breadcrumbs items={[...parentCrumbs, { label: project.title }]} />
       <header className="mt-6 max-w-3xl">
         {meta.length > 0 && (
-          <p className="text-sm font-semibold tracking-wider text-accent-text uppercase">
+          <p className="text-sm font-semibold tracking-wider text-muted uppercase">
             {meta.join(" · ")}
           </p>
         )}

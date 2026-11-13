@@ -23,7 +23,7 @@ export function ProjectCard({ project, viewLabel = "Ver más" }: Props) {
           className="aspect-[4/3] transition group-hover:opacity-90"
         />
         <div className="flex flex-1 flex-col p-6">
-          {meta && <p className="text-xs font-semibold tracking-wider text-accent-text uppercase">{meta}</p>}
+          {meta && <p className="text-xs font-semibold tracking-wider text-muted uppercase">{meta}</p>}
           <h3 className="mt-2 line-clamp-2 text-lg font-semibold group-hover:underline">{project.title}</h3>
           <p className="mt-2 line-clamp-3 text-sm text-muted">{project.summary}</p>
           <span className="mt-auto pt-4 text-sm font-semibold text-accent-text">

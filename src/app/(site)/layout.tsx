@@ -1,7 +1,7 @@
 import { cacheLife } from "next/cache";
 import { site } from "@/lib/site";
 import { whatsappUrl } from "@/lib/contact";
-import { buildNavigation, sectionIds } from "@/lib/navigation";
+import { buildNavigation, heroId, sectionIds } from "@/lib/navigation";
 import { Footer } from "@/components/layout/Footer";
 import { HashlessSectionLinks } from "@/components/layout/HashlessSectionLinks";
 import { Header } from "@/components/layout/Header";
@@ -51,8 +51,9 @@ export default async function SiteLayout({ children }: LayoutProps<"/">) {
       {whatsapp && (
         <WhatsAppButton
           href={whatsappUrl(whatsapp)}
-          // La sección de contacto ya tiene su botón de WhatsApp: no mostrar ambos a la vez.
-          hideWhenVisible={site.sections.contact ? sectionIds.contact : undefined}
+          // El hero tiene sus propios botones (en móvil el flotante tapaba los del carrusel) y
+          // la sección de contacto ya muestra WhatsApp: el botón se oculta mientras se vean.
+          hideWhenVisible={site.sections.contact ? [heroId, sectionIds.contact] : [heroId]}
         />
       )}
     </>

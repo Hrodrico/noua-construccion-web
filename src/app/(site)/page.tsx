@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { site } from "@/lib/site";
 import { getAbout, getHero, getProjects, getReviews, getServices } from "@/lib/data";
-import { sectionIds } from "@/lib/navigation";
+import { heroId, sectionIds } from "@/lib/navigation";
 import { AboutSection } from "@/components/sections/AboutSection";
 import { ContactSection } from "@/components/sections/ContactSection";
 import { HeroSection } from "@/components/sections/HeroSection";
@@ -25,7 +25,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <HeroSection content={hero} fallbackLabel={site.name} />
+      <HeroSection id={heroId} content={hero} fallbackLabel={site.name} />
       {sections.about && <AboutSection id={sectionIds.about} label={labels.about} content={about} />}
       {sections.services && (
         <ServicesSection id={sectionIds.services} label={labels.services} services={services} />
