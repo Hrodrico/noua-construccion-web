@@ -6,7 +6,7 @@ describe("Breadcrumbs", () => {
   const items = [
     { label: "Inicio", href: "/" },
     { label: "Listado", href: "/listado" },
-    { label: "Detalle", href: "/listado/detalle" },
+    { label: "Detalle" },
   ];
 
   it("enlaza los niveles anteriores y marca la página actual sin enlace", () => {
@@ -17,6 +17,14 @@ describe("Breadcrumbs", () => {
     expect(screen.getByRole("link", { name: "Listado" })).toHaveAttribute("href", "/listado");
     expect(screen.queryByRole("link", { name: "Detalle" })).not.toBeInTheDocument();
     expect(screen.getByText("Detalle")).toHaveAttribute("aria-current", "page");
+  });
+
+  it("puede terminar en un enlace, sin página actual ni separador final", () => {
+    render(<Breadcrumbs items={items.slice(0, 2)} />);
+
+    expect(screen.getByRole("link", { name: "Listado" })).toHaveAttribute("href", "/listado");
+    expect(screen.getByRole("navigation").querySelector("[aria-current]")).toBeNull();
+    expect(screen.getAllByRole("listitem")[1].querySelector("svg")).toBeNull();
   });
 
   it("pone el separador al final de cada nivel anterior, no al inicio del siguiente", () => {

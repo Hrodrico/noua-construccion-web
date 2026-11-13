@@ -71,8 +71,8 @@ async function ProjectDetail({ params }: { params: Params }) {
   if (!project) notFound();
 
   const reviews = await getReviews({ projectSlug: project.slug });
+  // Sin la categoría: suele repetir el título justo debajo (ej. "Terrazas" sobre "Terraza con…").
   const meta = [
-    project.category,
     project.location,
     project.date && formatMonthYear(project.date, site.locale),
   ].filter(Boolean);
@@ -83,7 +83,8 @@ async function ProjectDetail({ params }: { params: Params }) {
 
   return (
     <>
-      <Breadcrumbs items={[...parentCrumbs, { label: project.title }]} />
+      {/* La ruta termina en el listado: el nombre de la obra ya es el h1 justo debajo. */}
+      <Breadcrumbs items={parentCrumbs} />
       <header className="mt-6 max-w-3xl">
         {meta.length > 0 && (
           <p className="text-sm font-semibold tracking-wider text-muted uppercase">
@@ -129,7 +130,7 @@ function ProjectSkeleton() {
   return (
     <div aria-busy="true">
       {/* Los niveles anteriores no dependen del slug: se ven de inmediato. */}
-      <Breadcrumbs items={[...parentCrumbs, { label: "…" }]} />
+      <Breadcrumbs items={parentCrumbs} />
       <div className="mt-6 animate-pulse motion-reduce:animate-none">
         <span className="sr-only">Cargando trabajo…</span>
         <div className="h-4 w-40 rounded bg-surface" />
