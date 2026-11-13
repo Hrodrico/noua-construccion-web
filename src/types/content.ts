@@ -29,6 +29,8 @@ export type AboutContent = {
   paragraphs: string[];
   highlights?: { value: string; label: string }[];
   image?: ImageAsset;
+  /** "portrait" muestra la imagen completa en formato vertical (ej: un afiche); por defecto 4:3. */
+  imageOrientation?: "landscape" | "portrait";
 };
 
 export type Service = {

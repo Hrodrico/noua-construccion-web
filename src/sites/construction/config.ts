@@ -24,7 +24,7 @@ export const config: SiteConfig = {
     { network: "instagram", url: "https://www.instagram.com/noua.contacto/" },
   ],
   branding: {
-    logo: "/logos/logo-noua-mark.png",
+    logo: "/logos/logo-noua-full.webp",
   },
   theme: {
     primary: "#0A1F3C",
