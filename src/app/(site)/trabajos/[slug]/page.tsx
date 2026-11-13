@@ -53,7 +53,7 @@ export default function ProjectPage(props: PageProps<"/trabajos/[slug]">) {
         </Suspense>
 
         {site.sections.contact && (
-          <div className="focus-on-dark mt-16 rounded-3xl bg-primary p-8 text-primary-foreground sm:p-12">
+          <div className="focus-on-dark mt-16 rounded-3xl bg-primary p-8 text-primary-foreground sm:p-12 dark:border dark:border-border dark:bg-surface dark:text-foreground">
             <p className="text-2xl font-bold">¿Te interesa algo similar?</p>
             <ButtonLink href={`/#${sectionIds.contact}`} variant="accent" className="mt-6">
               {site.actions?.quote ?? site.labels.contact}
@@ -86,7 +86,7 @@ async function ProjectDetail({ params }: { params: Params }) {
       <Breadcrumbs items={[...parentCrumbs, { label: project.title }]} />
       <header className="mt-6 max-w-3xl">
         {meta.length > 0 && (
-          <p className="text-sm font-semibold tracking-wider text-accent-text uppercase">
+          <p className="text-sm font-semibold tracking-wider text-muted uppercase">
             {meta.join(" · ")}
           </p>
         )}

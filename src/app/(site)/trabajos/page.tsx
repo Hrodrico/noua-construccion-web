@@ -21,6 +21,7 @@ export default async function ProjectsPage() {
       label={site.labels.projects}
       projects={projects}
       showAllLink={false}
+      viewProjectLabel={site.actions?.viewProject}
       breadcrumbs={
         <Breadcrumbs
           items={[{ label: "Inicio", href: "/" }, { label: site.labels.projects }]}

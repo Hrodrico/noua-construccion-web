@@ -1,7 +1,7 @@
 import { cacheLife } from "next/cache";
 import { site } from "@/lib/site";
 import { whatsappUrl } from "@/lib/contact";
-import { buildNavigation, sectionIds } from "@/lib/navigation";
+import { buildNavigation, heroId, sectionIds } from "@/lib/navigation";
 import { Footer } from "@/components/layout/Footer";
 import { HashlessSectionLinks } from "@/components/layout/HashlessSectionLinks";
 import { Header } from "@/components/layout/Header";
@@ -20,7 +20,7 @@ async function getCurrentYear() {
 export default async function SiteLayout({ children }: LayoutProps<"/">) {
   const navigation = buildNavigation(site);
   const { phone, email, address, city, whatsapp } = site.contact;
-  const contactLines = [phone, email, [address, city].filter(Boolean).join(", ")].filter(
+  const contactLines = [email, phone, [address, city].filter(Boolean).join(", ")].filter(
     (line): line is string => Boolean(line),
   );
   const cta = site.sections.contact
@@ -36,7 +36,14 @@ export default async function SiteLayout({ children }: LayoutProps<"/">) {
         Saltar al contenido
       </a>
       <HashlessSectionLinks />
-      <Header name={site.name} logo={site.branding.logo} navigation={navigation} cta={cta} />
+      <Header
+        name={site.name}
+        logo={site.branding.logo}
+        logoDark={site.themeDark ? site.branding.logoDark : undefined}
+        navigation={navigation}
+        cta={cta}
+        themeToggle={Boolean(site.themeDark)}
+      />
       <main id="contenido" className="flex-1">
         {children}
       </main>
@@ -51,8 +58,9 @@ export default async function SiteLayout({ children }: LayoutProps<"/">) {
       {whatsapp && (
         <WhatsAppButton
           href={whatsappUrl(whatsapp)}
-          // La sección de contacto ya tiene su botón de WhatsApp: no mostrar ambos a la vez.
-          hideWhenVisible={site.sections.contact ? sectionIds.contact : undefined}
+          // El hero tiene sus propios botones (en móvil el flotante tapaba los del carrusel) y
+          // la sección de contacto ya muestra WhatsApp: el botón se oculta mientras se vean.
+          hideWhenVisible={site.sections.contact ? [heroId, sectionIds.contact] : [heroId]}
         />
       )}
     </>

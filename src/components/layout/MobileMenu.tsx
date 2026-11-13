@@ -37,7 +37,7 @@ export function MobileMenu({ navigation }: Props) {
                 <Link
                   href={item.href}
                   onClick={() => setOpen(false)}
-                  className="-mx-2 block rounded-lg px-2 py-3 text-base font-medium transition hover:bg-foreground/10"
+                  className="-mx-2 block rounded-lg px-2 py-3 text-base font-medium transition hover:bg-accent/15 hover:text-accent-text"
                 >
                   {item.label}
                 </Link>

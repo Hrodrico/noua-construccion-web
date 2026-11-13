@@ -15,7 +15,8 @@ type Props = {
 
 export function Footer({ name, tagline, navigation, social, contactLines, year }: Props) {
   return (
-    <footer className="focus-on-dark bg-primary text-primary-foreground">
+    // En modo oscuro el primary (azul de botones) es muy llamativo para un bloque grande: usa surface.
+    <footer className="focus-on-dark bg-primary text-primary-foreground dark:border-t dark:border-border dark:bg-surface dark:text-foreground">
       <Container className="grid gap-10 py-12 md:grid-cols-3">
         <div>
           <p className="text-lg font-bold">{name}</p>
@@ -24,7 +25,8 @@ export function Footer({ name, tagline, navigation, social, contactLines, year }
         </div>
 
         <nav aria-label="Pie de página">
-          <ul className="text-sm">
+          {/* -mt-3 compensa el py-3 de los enlaces (área táctil) para alinear el primero con las otras columnas. */}
+          <ul className="-mt-3 text-sm">
             {navigation.map((item) => (
               <li key={item.href}>
                 <Link href={item.href} className="inline-block py-3 opacity-80 transition hover:opacity-100">

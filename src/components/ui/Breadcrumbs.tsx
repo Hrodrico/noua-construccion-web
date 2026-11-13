@@ -16,8 +16,9 @@ export function Breadcrumbs({ items, className = "" }: Props) {
         {items.map((item, index) => {
           const current = index === items.length - 1;
           return (
+            // El separador va al final del elemento anterior: si la ruta se parte en dos líneas,
+            // la segunda no empieza con "›".
             <li key={`${item.label}-${index}`} className="flex min-w-0 items-center gap-x-1.5">
-              {index > 0 && <ChevronRightIcon aria-hidden="true" className="h-4 w-4 shrink-0 opacity-60" />}
               {current || !item.href ? (
                 <span aria-current={current ? "page" : undefined} className="truncate font-medium text-foreground">
                   {item.label}
@@ -27,6 +28,7 @@ export function Breadcrumbs({ items, className = "" }: Props) {
                   {item.label}
                 </Link>
               )}
+              {!current && <ChevronRightIcon aria-hidden="true" className="h-4 w-4 shrink-0 opacity-60" />}
             </li>
           );
         })}

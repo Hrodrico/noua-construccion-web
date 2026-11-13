@@ -24,7 +24,9 @@ export const config: SiteConfig = {
     { network: "instagram", url: "https://www.instagram.com/noua.contacto/" },
   ],
   branding: {
-    logo: "/logos/logo-noua-mark.png",
+    logo: "/logos/logo-noua.webp",
+    // Franja en el azul de los botones: la original (#0A1F3C) se pierde sobre el fondo oscuro.
+    logoDark: "/logos/logo-noua-dark.webp",
   },
   theme: {
     primary: "#0A1F3C",
@@ -37,6 +39,19 @@ export const config: SiteConfig = {
     surface: "#F4F2EF",
     muted: "#5B6470",
     border: "#E2DED8",
+  },
+  // Mismo naranjo de marca sobre un azul noche; el azul se aclara para botones y footer.
+  themeDark: {
+    primary: "#24589F",
+    primaryForeground: "#FFFFFF",
+    accent: "#F78F36",
+    accentForeground: "#0A1F3C",
+    accentText: "#F9A65E",
+    background: "#0B1322",
+    foreground: "#E6E9EE",
+    surface: "#131E31",
+    muted: "#9AA5B5",
+    border: "#2A3A55",
   },
   seo: {
     title: "Noua Construcción | Construcción, remodelación y mantención",
@@ -55,6 +70,7 @@ export const config: SiteConfig = {
   actions: {
     quote: "Cotiza tu proyecto",
     allProjects: "Ver todas las obras",
+    viewProject: "Ver obra",
   },
   labels: {
     about: "Sobre nosotros",

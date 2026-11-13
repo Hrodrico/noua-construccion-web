@@ -2,17 +2,22 @@ import Image from "next/image";
 import Link from "next/link";
 import type { NavItem } from "@/lib/navigation";
 import { ButtonLink } from "@/components/ui/ButtonLink";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { Container } from "./Container";
 import { MobileMenu } from "./MobileMenu";
 
 type Props = {
   name: string;
   logo?: string;
+  /** Logo para modo oscuro; se alterna por CSS con la variante dark. */
+  logoDark?: string;
   navigation: NavItem[];
   cta?: NavItem;
+  /** Muestra el botón de modo claro/oscuro (solo si el negocio define una paleta oscura). */
+  themeToggle?: boolean;
 };
 
-export function Header({ name, logo, navigation, cta }: Props) {
+export function Header({ name, logo, logoDark, navigation, cta, themeToggle = false }: Props) {
   // En escritorio el botón CTA ya lleva a su destino: no repetirlo como enlace del menú.
   // El botón comparte el breakpoint del menú (md): en móvil el destino queda solo dentro del menú.
   const desktopNavigation = cta ? navigation.filter((item) => item.href !== cta.href) : navigation;
@@ -22,7 +27,29 @@ export function Header({ name, logo, navigation, cta }: Props) {
       <Container className="flex h-16 items-center justify-between gap-6">
         <Link href="/" className="flex items-center gap-2 text-lg font-bold tracking-tight">
           {logo ? (
-            <Image src={logo} alt={name} width={160} height={32} className="h-8 w-40" priority />
+            // width/height en 0 + w-auto: respeta la proporción de cualquier logo.
+            <>
+              <Image
+                src={logo}
+                alt={name}
+                width={0}
+                height={0}
+                sizes="240px"
+                className={`h-11 w-auto ${logoDark ? "dark:hidden" : ""}`}
+                priority
+              />
+              {logoDark && (
+                <Image
+                  src={logoDark}
+                  alt={name}
+                  width={0}
+                  height={0}
+                  sizes="240px"
+                  className="hidden h-11 w-auto dark:block"
+                  priority
+                />
+              )}
+            </>
           ) : (
             name
           )}
@@ -34,7 +61,7 @@ export function Header({ name, logo, navigation, cta }: Props) {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className="rounded-full px-3 py-2 text-foreground/80 transition hover:bg-foreground/10 hover:text-foreground"
+                  className="rounded-full px-3 py-2 text-foreground/80 transition hover:bg-accent/15 hover:text-accent-text"
                 >
                   {item.label}
                 </Link>
@@ -43,7 +70,8 @@ export function Header({ name, logo, navigation, cta }: Props) {
           </ul>
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 md:gap-2">
+          {themeToggle && <ThemeToggle />}
           {/* La visibilidad va en el contenedor: el inline-flex de ButtonLink le gana a "hidden". */}
           {cta && (
             <div className="hidden md:block">

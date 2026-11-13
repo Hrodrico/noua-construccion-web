@@ -3,6 +3,9 @@ import type { SiteConfig } from "@/types/site";
 export type NavItem = { label: string; href: string };
 
 /** Anclas del home. Se usan como id de cada sección. Son URL públicas, por eso van en español. */
+/** Id del hero del home (no es una sección activable ni aparece en la navegación). */
+export const heroId = "inicio";
+
 export const sectionIds = {
   about: "nosotros",
   services: "servicios",

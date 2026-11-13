@@ -18,4 +18,12 @@ describe("Breadcrumbs", () => {
     expect(screen.queryByRole("link", { name: "Detalle" })).not.toBeInTheDocument();
     expect(screen.getByText("Detalle")).toHaveAttribute("aria-current", "page");
   });
+
+  it("pone el separador al final de cada nivel anterior, no al inicio del siguiente", () => {
+    render(<Breadcrumbs items={items} />);
+    const levels = screen.getAllByRole("listitem");
+
+    expect(levels.map((li) => li.querySelector("svg") !== null)).toEqual([true, true, false]);
+    expect(levels[0].lastElementChild?.tagName.toLowerCase()).toBe("svg");
+  });
 });

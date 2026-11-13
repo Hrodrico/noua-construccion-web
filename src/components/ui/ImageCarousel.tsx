@@ -87,7 +87,7 @@ export function ImageCarousel({
               priority={priority && index === 0}
               // Las vecinas se cargan antes de llegar a verse al deslizar.
               loading={priority && index === 0 ? undefined : distance(index) <= 1 ? "eager" : "lazy"}
-              className="object-cover"
+              className="object-cover dark:brightness-95"
             />
           </div>
         ))}
@@ -114,7 +114,7 @@ export function ImageCarousel({
               className="group flex h-11 min-w-7 items-center justify-center px-1"
             >
               <span
-                className={`relative h-2.5 overflow-hidden rounded-full bg-background/85 shadow transition-all group-hover:bg-background group-active:scale-90 ${
+                className={`relative h-2.5 overflow-hidden rounded-full bg-background/85 shadow transition-all group-hover:bg-background group-active:scale-90 dark:bg-foreground/85 dark:group-hover:bg-foreground ${
                   index === current ? "w-10" : "w-2.5"
                 }`}
               >

@@ -12,16 +12,20 @@ export const content: SiteContent = {
     // Carrusel con las mejores fotos de las obras: se referencian desde su carpeta, sin duplicarlas.
     images: [
       {
-        src: "/images/projects/2026/quincho-cocina-barra/cocina-barra.webp",
-        alt: "Quincho techado con vigas de madera, cocina negra con luz cálida y barra con piso alto",
+        src: "/images/projects/2026/quincho-piscina-estacionamiento-lampa/quincho.webp",
+        alt: "Quincho de noche con vigas de madera, luces colgantes, cocina con barra y sillas altas",
       },
       {
-        src: "/images/projects/2026/cierre-patio-revestimiento/despues.webp",
-        alt: "Patio interior con muros revestidos en tono madera y piso de pasto sintético",
+        src: "/images/projects/2026/quincho-piscina-estacionamiento-lampa/piscina.webp",
+        alt: "Piscina con borde de piedra, pasto sintético y cierre perimetral de wall panel tono madera",
       },
       {
-        src: "/images/projects/2026/renovacion-fachada/despues.webp",
-        alt: "Fachada de casa de un piso recién pintada de blanco, con aleros renovados",
+        src: "/images/projects/2026/terraza-vitacura/terminada.webp",
+        alt: "Terraza con piso de porcelanato tipo madera bajo un toldo y jardineras al fondo",
+      },
+      {
+        src: "/images/projects/2026/quincho-piscina-estacionamiento-lampa/estacionamiento.webp",
+        alt: "Estacionamiento techado para dos autos con pilares de madera frente a una casa",
       },
     ],
     primaryCta: { label: "Cotiza tu proyecto", href: "/#contacto" },
@@ -34,9 +38,10 @@ export const content: SiteContent = {
       "Trabajamos con personal calificado, cumplimos los plazos que acordamos y garantizamos nuestros trabajos. Te acompañamos desde la idea hasta la entrega con atención personalizada.",
     ],
     image: {
-      src: "/images/projects/2026/reparacion-filtracion-bajo-radier/radier-abierto.webp",
-      alt: "Radier abierto en plena faena para reparar una filtración bajo el piso de la cocina",
+      src: "/images/about/afiche-servicios.webp",
+      alt: "Afiche de Noua con sus servicios: construcción y ampliaciones, logias, terrazas y piscinas, estacionamientos, muebles a medida, remodelaciones y mantenciones",
     },
+    imageOrientation: "portrait",
   },
   services: [
     {
@@ -72,94 +77,191 @@ export const content: SiteContent = {
   ],
   projects: [
     {
-      slug: "quincho-cocina-barra",
-      title: "Quincho con cocina y barra",
-      summary: "Quincho techado con cocina, muebles a medida y barra con piso alto.",
+      slug: "quincho-piscina-estacionamiento-lampa",
+      title: "Quincho, piscina y estacionamiento",
+      summary: "Quincho con cocina y barra, piscina con cierre de wall panel y estacionamiento techado.",
       description: [
-        "Construimos un quincho techado con vigas de madera a la vista, revestimiento de listones en los muros e iluminación cálida.",
-        "Incluye cocina con cubierta negra, muebles superiores a medida y una barra central con piso alto para compartir alrededor de la parrilla.",
+        "Transformamos el patio completo de esta casa: un quincho techado con vigas de madera, cocina, barra con piso alto e iluminación cálida para compartir de noche.",
+        "Construimos una piscina con borde de piedra rodeada de pasto sintético y cerramos el perímetro con wall panel tono madera.",
+        "En el frente techamos el estacionamiento para dos autos con pilares de madera y renovamos el acceso.",
       ],
-      category: "Quinchos",
+      category: "Quinchos y piscinas",
+      location: "Lampa",
       cover: {
-        src: "/images/projects/2026/quincho-cocina-barra/cocina-barra.webp",
-        alt: "Quincho techado con vigas de madera, cocina negra iluminada y barra con piso alto",
-      },
-      gallery: [],
-      featured: true,
-    },
-    {
-      slug: "reparacion-filtracion-bajo-radier",
-      title: "Reparación de filtración bajo radier",
-      summary: "Detectamos la fuga, reparamos la cañería y reinstalamos el porcelanato sin romper toda la cocina.",
-      description: [
-        "No es solo cambiar el piso. Es encontrar la fuga, reparar la cañería, rehacer el radier, nivelar, instalar el porcelanato y dejar todo limpio.",
-        "Este cliente pensó que tenía que romper toda la cocina. Lo solucionamos al saber detectar, reparar y encontrar los materiales adecuados.",
-      ],
-      category: "Mantención",
-      date: "2026-10-27",
-      cover: {
-        src: "/images/projects/2026/reparacion-filtracion-bajo-radier/porcelanato-terminado.webp",
-        alt: "Piso de porcelanato reinstalado y nivelado tras reparar la filtración",
+        src: "/images/projects/2026/quincho-piscina-estacionamiento-lampa/quincho.webp",
+        alt: "Quincho de noche con vigas de madera, luces colgantes, cocina con barra y sillas altas",
       },
       gallery: [
         {
-          src: "/images/projects/2026/reparacion-filtracion-bajo-radier/radier-abierto.webp",
-          alt: "Radier abierto con la cañería expuesta para reparar la filtración",
+          src: "/images/projects/2026/quincho-piscina-estacionamiento-lampa/quincho.webp",
+          alt: "Quincho con living exterior, cocina negra y barra con sillas altas",
         },
         {
-          src: "/images/projects/2026/reparacion-filtracion-bajo-radier/porcelanato-terminado.webp",
-          alt: "Mismo sector terminado con porcelanato nuevo",
+          src: "/images/projects/2026/quincho-piscina-estacionamiento-lampa/piscina.webp",
+          alt: "Piscina con borde de piedra, pasto sintético y cierre perimetral de wall panel",
+        },
+        {
+          src: "/images/projects/2026/quincho-piscina-estacionamiento-lampa/estacionamiento.webp",
+          alt: "Estacionamiento techado para dos autos con pilares de madera",
+        },
+      ],
+      featured: true,
+    },
+    {
+      slug: "terraza-vitacura",
+      title: "Terraza con porcelanato y jardineras",
+      summary: "De un patio de tierra a una terraza con piso de porcelanato tipo madera y jardineras.",
+      description: [
+        "El espacio era un patio de tierra con baldosas sueltas. Nivelamos el terreno, instalamos porcelanato tipo madera y lo rematamos con bordes del mismo material.",
+        "Construimos jardineras revestidas a lo largo del cierre y las plantamos para darle vida a la terraza.",
+      ],
+      category: "Terrazas",
+      location: "Vitacura",
+      date: "2026-10-05",
+      cover: {
+        src: "/images/projects/2026/terraza-vitacura/terminada.webp",
+        alt: "Terraza terminada con piso de porcelanato tipo madera bajo un toldo y jardineras al fondo",
+      },
+      gallery: [
+        {
+          src: "/images/projects/2026/terraza-vitacura/antes.webp",
+          alt: "Patio antes de la obra, con tierra y baldosas sueltas bajo un toldo",
+        },
+        {
+          src: "/images/projects/2026/terraza-vitacura/en-obra.webp",
+          alt: "Terreno nivelado y jardinera en construcción durante la obra",
+        },
+        {
+          src: "/images/projects/2026/terraza-vitacura/terminada.webp",
+          alt: "Terraza terminada con porcelanato tipo madera y jardineras",
+        },
+        {
+          src: "/images/projects/2026/terraza-vitacura/terminada-arbol.webp",
+          alt: "Vista de la terraza terminada desde el jardín",
+        },
+        {
+          src: "/images/projects/2026/terraza-vitacura/jardinera.webp",
+          alt: "Detalle de la jardinera con flores y lavandas junto al borde de porcelanato",
+        },
+      ],
+      featured: true,
+    },
+    {
+      slug: "remodelacion-bano-nunoa",
+      title: "Remodelación de baño",
+      summary: "Cambiamos la tina por una ducha con mampara y renovamos revestimientos, mueble y espejo.",
+      description: [
+        "Reemplazamos la tina por una ducha con mampara de vidrio y nicho iluminado, renovamos cerámicas y piso, e instalamos un mueble de vanitorio en tono madera con repisas y espejo iluminado.",
+      ],
+      category: "Remodelación",
+      location: "Ñuñoa",
+      date: "2026-10-27",
+      cover: {
+        src: "/images/projects/2026/remodelacion-bano-nunoa/despues.webp",
+        alt: "Baño remodelado con ducha de vidrio, mueble de madera clara y espejo redondo iluminado",
+      },
+      gallery: [
+        {
+          src: "/images/projects/2026/remodelacion-bano-nunoa/antes.webp",
+          alt: "Baño antes de la remodelación, con tina, cortina y mueble antiguo",
+        },
+        {
+          src: "/images/projects/2026/remodelacion-bano-nunoa/despues.webp",
+          alt: "Baño después de la remodelación, con ducha de vidrio y mueble de madera clara",
         },
       ],
       featured: false,
     },
     {
-      slug: "cierre-patio-revestimiento",
-      title: "Cierre de patio con revestimiento",
-      summary: "Transformamos un patio interior con nuevos cierres de revestimiento y pasto sintético.",
+      slug: "reparacion-cielos-lastarria",
+      title: "Reparación de cielos por humedad",
+      summary: "Reparamos y pintamos cielos dañados por humedad en el pasillo y el baño de un departamento.",
       description: [
-        "Reemplazamos los cierres provisorios del patio por muros revestidos en tono madera, ordenamos las instalaciones y terminamos el piso con pasto sintético.",
+        "La humedad había soltado la pintura del cielo del pasillo y manchado el del baño. Retiramos lo dañado, reparamos la superficie y volvimos a pintar con terminación pareja.",
       ],
-      category: "Remodelación",
+      category: "Mantención",
+      location: "Santiago",
       cover: {
-        src: "/images/projects/2026/cierre-patio-revestimiento/despues.webp",
-        alt: "Patio interior con muros revestidos en tono madera y piso de pasto sintético",
+        src: "/images/projects/2026/reparacion-cielos-lastarria/pasillo-despues.webp",
+        alt: "Cielo del pasillo reparado y pintado de blanco",
       },
       gallery: [
         {
-          src: "/images/projects/2026/cierre-patio-revestimiento/antes.webp",
-          alt: "Patio antes de la obra, con cierres provisorios de pasto sintético y un biombo",
+          src: "/images/projects/2026/reparacion-cielos-lastarria/pasillo-antes.webp",
+          alt: "Cielo del pasillo con la pintura soltada por la humedad",
         },
         {
-          src: "/images/projects/2026/cierre-patio-revestimiento/despues.webp",
-          alt: "Patio después de la obra, con muros revestidos en tono madera",
+          src: "/images/projects/2026/reparacion-cielos-lastarria/pasillo-despues.webp",
+          alt: "Cielo del pasillo reparado y pintado",
+        },
+        {
+          src: "/images/projects/2026/reparacion-cielos-lastarria/bano-antes.webp",
+          alt: "Cielo del baño con manchas de humedad",
+        },
+        {
+          src: "/images/projects/2026/reparacion-cielos-lastarria/bano-despues.webp",
+          alt: "Cielo del baño reparado y pintado",
         },
       ],
       featured: true,
     },
     {
-      slug: "renovacion-fachada",
-      title: "Renovación de fachada",
-      summary: "Pintura de muros, aleros y rejas para renovar el exterior de la casa.",
+      slug: "inspeccion-tecnica-la-florida",
+      title: "Inspección técnica de departamento",
+      summary: "Revisamos un departamento nuevo antes de la entrega y marcamos cada detalle a corregir.",
       description: [
-        "Renovamos el exterior de la casa: reparamos y pintamos muros y aleros, y repintamos las rejas de las ventanas.",
+        "Antes de recibir su departamento nuevo, el cliente nos pidió revisarlo. Inspeccionamos pisos, cerámicas, puertas, griferías, terraza y ventanas, y marcamos con cinta cada observación para que la inmobiliaria la corrigiera.",
       ],
-      category: "Mantención",
+      category: "Inspección técnica",
+      location: "La Florida",
+      date: "2026-11-02",
       cover: {
-        src: "/images/projects/2026/renovacion-fachada/despues.webp",
-        alt: "Fachada de casa de un piso pintada de blanco, con aleros renovados y rejas oscuras",
+        src: "/images/projects/2026/inspeccion-tecnica-la-florida/piso-bano.webp",
+        alt: "Piso de baño con cintas azules que marcan las observaciones de la inspección",
       },
       gallery: [
         {
-          src: "/images/projects/2026/renovacion-fachada/antes.webp",
-          alt: "Fachada antes de la renovación, con alero de madera desgastado",
+          src: "/images/projects/2026/inspeccion-tecnica-la-florida/piso-bano.webp",
+          alt: "Piso de baño con observaciones marcadas con cinta azul",
         },
         {
-          src: "/images/projects/2026/renovacion-fachada/despues.webp",
-          alt: "Fachada después de la renovación, pintada de blanco",
+          src: "/images/projects/2026/inspeccion-tecnica-la-florida/ducha.webp",
+          alt: "Grifería de ducha con observaciones marcadas en la cerámica",
+        },
+        {
+          src: "/images/projects/2026/inspeccion-tecnica-la-florida/puerta.webp",
+          alt: "Revisión de la chapa y la manilla de una puerta",
+        },
+        {
+          src: "/images/projects/2026/inspeccion-tecnica-la-florida/piso-dormitorio.webp",
+          alt: "Piso flotante de dormitorio con una observación marcada",
+        },
+        {
+          src: "/images/projects/2026/inspeccion-tecnica-la-florida/terraza.webp",
+          alt: "Piso de la terraza con observaciones marcadas",
+        },
+        {
+          src: "/images/projects/2026/inspeccion-tecnica-la-florida/fachada-ventana.webp",
+          alt: "Revisión de la terminación del muro sobre la ventana de la terraza",
         },
       ],
-      featured: true,
+      featured: false,
+    },
+    {
+      slug: "cubierta-cocina-las-condes",
+      title: "Cubierta de cocina",
+      summary: "Instalación de cubierta de granito con lavaplatos de acero inoxidable.",
+      description: [
+        "Instalamos una cubierta de granito gris con lavaplatos de acero inoxidable y grifería nueva, con terminación pareja contra el muro.",
+      ],
+      category: "Remodelación",
+      location: "Las Condes",
+      cover: {
+        src: "/images/projects/2026/cubierta-cocina-las-condes/cubierta.webp",
+        alt: "Cubierta de cocina de granito gris con lavaplatos de acero inoxidable",
+      },
+      gallery: [],
+      featured: false,
     },
   ],
   reviews: [],

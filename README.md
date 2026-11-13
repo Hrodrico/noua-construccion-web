@@ -2,6 +2,8 @@
 
 Sitio web de **Noua Construcción**: terrazas, quinchos, piscinas, ampliaciones y remodelaciones. Hecho con **Next.js**, **TypeScript** y **Tailwind CSS**, desplegado en **Vercel**.
 
+![Vista previa del sitio en móvil y escritorio](docs/preview.png)
+
 - Instagram: [@noua.contacto](https://www.instagram.com/noua.contacto/)
 - Teléfono / WhatsApp: +56 9 7399 4163
 
@@ -112,15 +114,15 @@ Las fotos de obras van en una carpeta por año y por obra, con el mismo `slug` d
 ```text
 public/images/projects/
   2026/
-    cierre-patio-revestimiento/
+    remodelacion-bano-nunoa/
       antes.webp
       despues.webp
-    quincho-cocina-barra/
-      cocina-barra.webp
+    terraza-vitacura/
+      terminada.webp
 ```
 
 ```ts
-cover: { src: "/images/projects/2026/quincho-cocina-barra/cocina-barra.webp", alt: "Quincho con cocina y barra" },
+cover: { src: "/images/projects/2026/terraza-vitacura/terminada.webp", alt: "Terraza con porcelanato tipo madera" },
 ```
 
 - **Año:** el de la obra; si el trabajo tiene `date`, debe coincidir.

@@ -30,4 +30,15 @@ describe("themeToCssVars", () => {
       "--brand-border": "#000009",
     });
   });
+
+  it("agrega las variables --brand-dark-* solo si hay paleta oscura", () => {
+    const dark: ThemeColors = { ...theme, primary: "#ffffff", border: "#fffffe" };
+    const vars = themeToCssVars(theme, dark) as Record<string, string>;
+
+    expect(vars["--brand-primary"]).toBe("#000001");
+    expect(vars["--brand-dark-primary"]).toBe("#ffffff");
+    expect(vars["--brand-dark-border"]).toBe("#fffffe");
+    expect(Object.keys(vars)).toHaveLength(20);
+    expect(Object.keys(themeToCssVars(theme)).some((key) => key.startsWith("--brand-dark-"))).toBe(false);
+  });
 });

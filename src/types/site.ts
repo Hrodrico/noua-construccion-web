@@ -67,8 +67,15 @@ export type SiteConfig = {
   branding: {
     /** Ruta en /public. Si se omite, se muestra el nombre como texto. */
     logo?: string;
+    /** Versión del logo para modo oscuro (ruta en /public). Sin valor, se usa `logo` en ambos modos. */
+    logoDark?: string;
   };
   theme: ThemeColors;
+  /**
+   * Paleta para el modo oscuro. Si existe, el sitio sigue la preferencia del sistema y muestra
+   * en el header un botón para cambiar entre claro y oscuro (la elección se recuerda).
+   */
+  themeDark?: ThemeColors;
   seo: {
     title: string;
     description: string;
@@ -86,5 +93,7 @@ export type SiteConfig = {
     quote?: string;
     /** Enlace del home al listado completo de trabajos, ej: "Ver todas las obras". */
     allProjects?: string;
+    /** Enlace al pie de cada tarjeta de trabajo, ej: "Ver obra". */
+    viewProject?: string;
   };
 };

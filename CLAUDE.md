@@ -61,7 +61,8 @@ src/types/          Contratos: site.ts (configuración), content.ts (contenido)
 ### Flujos que cruzan archivos
 
 - **Negocio activo:** `src/sites/index.ts` registra Noua (`sites.construction`) y lo expone como `activeSite`. `lib/site.ts` expone su `config` y `lib/data.ts` su `content`.
-- **Tema:** `config.theme` → `themeToCssVars()` (`lib/theme.ts`) lo aplica como variables `--brand-*` en el `<html>` del layout raíz → `globals.css` las mapea a tokens de Tailwind (`--color-primary`, etc.) con `@theme inline`. Un color nuevo requiere tocar `ThemeColors`, `theme.ts`, `globals.css` y cada `config.ts`.
+- **Tema:** `config.theme` (y `config.themeDark`, si existe) → `themeToCssVars()` (`lib/theme.ts`) los aplica como variables `--brand-*` y `--brand-dark-*` en el `<html>` del layout raíz → `globals.css` elige la paleta activa en `--palette-*` (la oscura con la clase `.dark`) y la mapea a tokens de Tailwind (`--color-primary`, etc.) con `@theme inline`. Un color nuevo requiere tocar `ThemeColors`, `theme.ts`, los dos bloques `--palette-*` de `globals.css` y cada `config.ts`.
+- **Modo oscuro:** solo si el negocio define `themeDark`. El script `themeInitScript` (`next/script` con `beforeInteractive` en el layout raíz) pone `.dark` antes de pintar según la elección guardada en `localStorage` o la preferencia del sistema; `ThemeToggle` (sol/luna en el header) la cambia. Ajustes puntuales con la variante `dark:` y siempre con tokens (ej. `dark:bg-surface`).
 
 ### Reglas que no se rompen
 
@@ -116,3 +117,20 @@ Esta versión difiere de lo que suele conocerse de Next.js; consulta `node_modul
 - **Idioma:** el código va en inglés (identificadores, archivos, carpetas, ids de `src/sites/`). En español: lo que ve el cliente final (textos de UI, contenido, metadatos SEO, URL públicas como `/trabajos` y anclas como `#servicios`) y lo dirigido a desarrolladores (comentarios, mensajes de error, logs y documentación).
 - Comentarios breves y solo cuando explican el porqué.
 - Commits pequeños y descriptivos; no commitear sin que `npm run build` pase.
+- **Mensajes de commit con [Conventional Commits](https://www.conventionalcommits.org/es/):** `<type>(<scope opcional>): <qué se hizo>`. El `type` va en inglés y en minúscula; la descripción, en español, en presente o imperativo, sin punto final y en menos de 72 caracteres. Si hace falta más detalle, va en el cuerpo, separado por una línea en blanco.
+  - Tipos: `feat` (funcionalidad nueva), `fix` (corrección), `style` (cambios visuales o de formato sin cambiar la lógica), `refactor`, `perf`, `test`, `docs`, `build` (dependencias, Next.js, Node), `ci` (GitHub Actions, rulesets) y `chore` (mantención, contenido, imágenes).
+  - Scope opcional: el área tocada, por ejemplo `header`, `footer`, `hero`, `obras`, `contenido`, `e2e`.
+  - Ejemplos: `feat(obras): agrega enlace "Ver obra" al pie de cada tarjeta`, `fix(whatsapp): oculta el botón flotante mientras se ve el hero`, `chore(contenido): reemplaza las fotos de obras por las de Noua`.
+  - Un cambio que rompe compatibilidad lleva `!` tras el tipo (`feat!: …`) y un pie `BREAKING CHANGE: …`.
+- **No hacer `git commit` ni `git push` sin autorización explícita del usuario en ese momento.** Al terminar una tarea, dejar los cambios sin commitear, resumirlos y preguntar si se commitean; luego, aparte, preguntar antes de hacer push. Una autorización vale solo para ese commit o push, no para los siguientes.
+
+## graphify
+
+This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
+
+Rules:
+- When graphify-out/graph.json exists, run `graphify query "<question>"` before your first grep, search or source-file read for a codebase question, and put this rule in every subagent prompt that explores code. Read raw files only for lines the graph or an earlier read already located. Use `graphify path "<A>" "<B>"` for relationships and `graphify explain "<concept>"` for focused concepts. These return a scoped subgraph, usually much smaller than GRAPH_REPORT.md or raw grep output.
+- If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
+- Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
+- After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).
+- A committed graphify-out/graph.json is rewritten whole on every build, so a large diff to it in a pull request is expected. Do not flag it as churn or suggest skipping the graph rebuild or its hooks.
