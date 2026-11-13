@@ -55,6 +55,7 @@ export const config: SiteConfig = {
   actions: {
     quote: "Cotiza tu proyecto",
     allProjects: "Ver todas las obras",
+    viewProject: "Ver obra",
   },
   labels: {
     about: "Sobre nosotros",

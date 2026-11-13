@@ -22,4 +22,11 @@ describe("ProjectCard", () => {
     render(<ProjectCard project={{ ...project, category: "Cocinas", location: "Ñuñoa" }} />);
     expect(screen.getByText("Cocinas · Ñuñoa")).toBeInTheDocument();
   });
+
+  it("muestra el enlace al pie con la etiqueta recibida o la por defecto", () => {
+    const { rerender } = render(<ProjectCard project={project} />);
+    expect(screen.getByText("Ver más")).toBeInTheDocument();
+    rerender(<ProjectCard project={project} viewLabel="Ver obra" />);
+    expect(screen.getByText("Ver obra")).toBeInTheDocument();
+  });
 });

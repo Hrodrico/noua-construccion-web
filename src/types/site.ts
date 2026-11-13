@@ -86,5 +86,7 @@ export type SiteConfig = {
     quote?: string;
     /** Enlace del home al listado completo de trabajos, ej: "Ver todas las obras". */
     allProjects?: string;
+    /** Enlace al pie de cada tarjeta de trabajo, ej: "Ver obra". */
+    viewProject?: string;
   };
 };

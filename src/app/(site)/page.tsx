@@ -36,6 +36,7 @@ export default async function HomePage() {
           label={labels.projects}
           projects={projects}
           showAllLabel={site.actions?.allProjects}
+          viewProjectLabel={site.actions?.viewProject}
         />
       )}
       {sections.reviews && (
