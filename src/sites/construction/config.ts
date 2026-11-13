@@ -5,7 +5,7 @@ export const config: SiteConfig = {
   tagline: "Construcción · Remodelación · Mantención",
   description:
     "Construcción, ampliaciones, terrazas, piscinas, remodelaciones y mantenciones en la Región Metropolitana.",
-  url: "https://www.noua-construccion.cl",
+  url: "https://www.noua.cl",
   locale: "es-CL",
   contact: {
     phone: "+56 9 7399 4163",
