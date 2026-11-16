@@ -89,7 +89,15 @@ export function ImageGallery({ images, label, className = "" }: Props) {
                   index === current ? "border-accent" : "border-transparent opacity-70 hover:opacity-100"
                 }`}
               >
-                <Image src={thumb.src} alt="" fill sizes="160px" className="object-cover dark:brightness-95" />
+                <Image
+                  src={thumb.src}
+                  alt=""
+                  fill
+                  sizes="160px"
+                  placeholder={thumb.blurDataURL ? "blur" : "empty"}
+                  blurDataURL={thumb.blurDataURL}
+                  className="object-cover dark:brightness-95"
+                />
               </button>
             </li>
           ))}
@@ -198,6 +206,8 @@ function SwipeViewer({
             fill
             sizes={sizes}
             draggable={false}
+            placeholder={slide.blurDataURL ? "blur" : "empty"}
+            blurDataURL={slide.blurDataURL}
             // Las vecinas se cargan antes de llegar a verse al deslizar.
             loading={distance(index) <= 1 ? "eager" : "lazy"}
             fetchPriority={highPriorityFirst && index === 0 ? "high" : undefined}

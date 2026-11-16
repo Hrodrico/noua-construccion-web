@@ -7,6 +7,8 @@ export type ImageAsset = {
   /** Ruta en /public o URL absoluta (configurar remotePatterns si es remota). */
   src: string;
   alt: string;
+  /** Vista previa mínima (data URL) que se muestra difuminada mientras carga la foto. */
+  blurDataURL?: string;
 };
 
 export type CallToAction = {

@@ -1,6 +1,7 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
+import placeholders from "@/generated/image-placeholders.json";
 import { sites } from "./index";
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
@@ -118,6 +119,20 @@ describe.each(Object.entries(sites))("sitio %s", (_, { config, content }) => {
 
       for (const image of images.filter((i) => i.src.startsWith("/"))) {
         expect(existsSync(join(process.cwd(), "public", image.src)), image.src).toBe(true);
+      }
+    });
+
+    it("tiene vista previa generada para cada imagen local", () => {
+      const images = [
+        ...(content.hero.images ?? []),
+        content.about.image,
+        ...content.services.map((s) => s.image),
+        ...content.projects.flatMap((p) => [p.cover, ...p.gallery]),
+      ].filter((image) => image !== undefined);
+
+      // Si falla: npm run images:placeholders (también corre antes de dev y build).
+      for (const image of images.filter((i) => i.src.startsWith("/"))) {
+        expect(placeholders, image.src).toHaveProperty([image.src]);
       }
     });
 
