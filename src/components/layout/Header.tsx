@@ -38,7 +38,7 @@ export function Header({ name, logo, logoDark, navigation, cta, themeToggle = fa
                 height={0}
                 sizes="240px"
                 className={`h-11 w-auto ${logoDark ? "dark:hidden" : ""}`}
-                priority
+                loading="eager"
               />
               {logoDark && (
                 <Image
@@ -48,7 +48,7 @@ export function Header({ name, logo, logoDark, navigation, cta, themeToggle = fa
                   height={0}
                   sizes="240px"
                   className="hidden h-11 w-auto dark:block"
-                  priority
+                  loading="eager"
                 />
               )}
             </>

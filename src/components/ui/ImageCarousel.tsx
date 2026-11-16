@@ -86,9 +86,10 @@ export function ImageCarousel({
               draggable={false}
               placeholder={image.blurDataURL ? "blur" : "empty"}
               blurDataURL={image.blurDataURL}
-              priority={priority && index === 0}
-              // Las vecinas se cargan antes de llegar a verse al deslizar.
-              loading={priority && index === 0 ? undefined : distance(index) <= 1 ? "eager" : "lazy"}
+              // Las vecinas se cargan antes de llegar a verse al deslizar, pero con prioridad baja:
+              // están ocultas y no deben competir con la imagen visible.
+              loading={distance(index) <= 1 ? "eager" : "lazy"}
+              fetchPriority={index !== current ? "low" : priority && index === 0 ? "high" : undefined}
               className="object-cover dark:brightness-95"
             />
           </div>

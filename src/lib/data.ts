@@ -33,7 +33,7 @@ export async function getServices(): Promise<Service[]> {
 
 export async function getProjects(options?: { featured?: boolean }): Promise<Project[]> {
   "use cache";
-  const projects = [...content.projects].sort((a, b) =>
+  const projects = content.projects.toSorted((a, b) =>
     (b.date ?? "").localeCompare(a.date ?? ""),
   );
   return options?.featured ? projects.filter((p) => p.featured) : projects;

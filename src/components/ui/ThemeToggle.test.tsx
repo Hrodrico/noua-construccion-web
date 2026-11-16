@@ -36,4 +36,23 @@ describe("ThemeToggle", () => {
     });
     expect(screen.getByRole("button", { name: "Modo oscuro" })).toHaveAttribute("aria-pressed", "true");
   });
+
+  it("sigue el cambio de tema hecho en otra pestaña", async () => {
+    render(<ThemeToggle />);
+    const button = screen.getByRole("button", { name: "Modo oscuro" });
+
+    await act(async () => {
+      localStorage.setItem(THEME_STORAGE_KEY, "dark");
+      window.dispatchEvent(new StorageEvent("storage", { key: THEME_STORAGE_KEY, newValue: "dark" }));
+    });
+    expect(document.documentElement).toHaveClass("dark");
+    expect(button).toHaveAttribute("aria-pressed", "true");
+
+    // Sin valor guardado vuelve al sistema (claro en el matchMedia simulado).
+    await act(async () => {
+      localStorage.removeItem(THEME_STORAGE_KEY);
+      window.dispatchEvent(new StorageEvent("storage", { key: THEME_STORAGE_KEY, newValue: null }));
+    });
+    expect(document.documentElement).not.toHaveClass("dark");
+  });
 });
