@@ -163,15 +163,6 @@ Vercel publica cada push a `main` en producción y cada PR como vista previa.
    - Cuando Vercel muestre "Valid Configuration", el sitio queda en el dominio con HTTPS. Debe coincidir con `url` en `config.ts`.
 3. **Repositorio privado en el plan Hobby:** Vercel solo publica commits cuyo autor puede verificar en GitHub. Configura en este repo el correo de tu cuenta: `git config user.email "<correo de GitHub>"`.
 
-## Antes de publicar
-
-- [x] `url` con el dominio real (`https://www.noua.cl`; se usa en canonical, sitemap y Open Graph).
-- [ ] Teléfono, WhatsApp (con código de país), correo y redes reales; nada de datos `example.com` ni `0000`.
-- [ ] Textos y reseñas reales (no publicar contenido de ejemplo como si fuera verdadero).
-- [ ] Fotos con texto alternativo descriptivo, logo, favicon y `seo.ogImage`.
-- [ ] Revisar en móvil, tablet y escritorio, en modo claro y oscuro.
-- [ ] `npm run build` sin errores.
-
 ## Contribuir
 
 - Flujo: rama (`feat/…`, `fix/…`, `chore/…`) → PR → CI en verde → merge a `main` con **Create a merge commit**.
