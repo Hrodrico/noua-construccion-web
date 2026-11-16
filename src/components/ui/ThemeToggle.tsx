@@ -39,8 +39,18 @@ export function ThemeToggle() {
     const onSystemChange = (event: MediaQueryListEvent) => {
       if (!readStored()) applyTheme(event.matches);
     };
+    // Si el tema cambia en otra pestaña, esta lo sigue (sin valor guardado, vuelve al sistema).
+    const onStorage = (event: StorageEvent) => {
+      if (event.key !== THEME_STORAGE_KEY && event.key !== null) return;
+      const stored = readStored();
+      applyTheme(stored ? stored === "dark" : media.matches);
+    };
     media.addEventListener("change", onSystemChange);
-    return () => media.removeEventListener("change", onSystemChange);
+    window.addEventListener("storage", onStorage);
+    return () => {
+      media.removeEventListener("change", onSystemChange);
+      window.removeEventListener("storage", onStorage);
+    };
   }, []);
 
   function toggle() {

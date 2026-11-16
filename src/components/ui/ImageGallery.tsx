@@ -32,17 +32,14 @@ export function ImageGallery({ images, label, className = "" }: Props) {
   const image = images[current];
   const go = (index: number) => setCurrent(Math.min(total - 1, Math.max(0, index)));
 
-  // <dialog> modal: atrapa el foco y cierra con Esc de forma nativa.
+  // <dialog> modal: atrapa el foco y cierra con Esc de forma nativa. El scroll de la página se
+  // bloquea por CSS (overscroll-contain), no con overflow en <html>: eso quita la barra de
+  // desplazamiento y mueve el contenido.
   useEffect(() => {
     const dialog = dialogRef.current;
     if (!dialog) return;
     if (expanded && !dialog.open) dialog.showModal();
     if (!expanded && dialog.open) dialog.close();
-
-    document.documentElement.style.overflow = expanded ? "hidden" : "";
-    return () => {
-      document.documentElement.style.overflow = "";
-    };
   }, [expanded]);
 
   return (
@@ -113,7 +110,7 @@ export function ImageGallery({ images, label, className = "" }: Props) {
           if (event.key === "ArrowLeft") go(current - 1);
         }}
         // El visor siempre es oscuro: en modo oscuro foreground es claro, por eso se invierte.
-        className="m-0 h-dvh max-h-none w-screen max-w-none bg-foreground p-0 text-background backdrop:bg-foreground dark:bg-background dark:text-foreground dark:backdrop:bg-background"
+        className="m-0 h-dvh max-h-none w-screen max-w-none overscroll-contain bg-foreground p-0 backdrop:overflow-hidden backdrop:overscroll-contain text-background backdrop:bg-foreground dark:bg-background dark:text-foreground dark:backdrop:bg-background"
       >
         {expanded && (
           <div className="flex h-full w-full flex-col">
@@ -210,7 +207,7 @@ function SwipeViewer({
             blurDataURL={slide.blurDataURL}
             // Las vecinas se cargan antes de llegar a verse al deslizar.
             loading={distance(index) <= 1 ? "eager" : "lazy"}
-            fetchPriority={highPriorityFirst && index === 0 ? "high" : undefined}
+            fetchPriority={index !== current ? "low" : highPriorityFirst && index === 0 ? "high" : undefined}
             className={imageClassName}
           />
         </div>

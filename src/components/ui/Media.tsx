@@ -6,6 +6,7 @@ type Props = {
   /** Texto del marcador cuando aún no hay foto. */
   fallbackLabel: string;
   sizes: string;
+  /** Imagen principal visible al cargar (LCP): se pide de inmediato y con prioridad alta. */
   priority?: boolean;
   className?: string;
 };
@@ -23,7 +24,9 @@ export function Media({ image, fallbackLabel, sizes, priority, className = "aspe
           alt={image.alt}
           fill
           sizes={sizes}
-          priority={priority}
+          // `priority` de next/image está deprecado en Next 16.
+          loading={priority ? "eager" : undefined}
+          fetchPriority={priority ? "high" : undefined}
           placeholder={image.blurDataURL ? "blur" : "empty"}
           blurDataURL={image.blurDataURL}
           // En modo oscuro las fotos claras brillan sobre el fondo: se atenúan levemente.
