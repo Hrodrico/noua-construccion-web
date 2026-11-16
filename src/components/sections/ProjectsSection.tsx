@@ -31,7 +31,7 @@ export function ProjectsSection({ id, label, projects, showAllLink = true, showA
   if (items.length === 0) return null;
 
   return (
-    <section id={id} aria-labelledby={`${id}-title`} className="bg-surface py-16 sm:py-24">
+    <section id={id} aria-labelledby={`${id}-title`} className="bg-surface py-12">
       <Container>
         {breadcrumbs}
         <SectionHeading id={`${id}-title`} title={label} />
