@@ -1,4 +1,5 @@
 import { activeSite } from "@/sites";
+import { withPlaceholders } from "@/lib/images";
 import type {
   AboutContent,
   HeroContent,
@@ -13,7 +14,7 @@ import type {
  * reescribe el cuerpo de cada función manteniendo su firma.
  */
 
-const { content } = activeSite;
+const content = withPlaceholders(activeSite.content);
 
 export async function getHero(): Promise<HeroContent> {
   "use cache";

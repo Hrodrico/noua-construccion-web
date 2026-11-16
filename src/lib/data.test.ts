@@ -32,7 +32,7 @@ describe("getProjects", () => {
 describe("getProject", () => {
   it("encuentra un trabajo por slug", async () => {
     for (const project of content.projects) {
-      expect(await getProject(project.slug)).toBe(project);
+      expect(await getProject(project.slug)).toMatchObject(project);
     }
   });
 

@@ -84,6 +84,8 @@ export function ImageCarousel({
               fill
               sizes={sizes}
               draggable={false}
+              placeholder={image.blurDataURL ? "blur" : "empty"}
+              blurDataURL={image.blurDataURL}
               priority={priority && index === 0}
               // Las vecinas se cargan antes de llegar a verse al deslizar.
               loading={priority && index === 0 ? undefined : distance(index) <= 1 ? "eager" : "lazy"}

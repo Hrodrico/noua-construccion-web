@@ -24,6 +24,8 @@ export function Media({ image, fallbackLabel, sizes, priority, className = "aspe
           fill
           sizes={sizes}
           priority={priority}
+          placeholder={image.blurDataURL ? "blur" : "empty"}
+          blurDataURL={image.blurDataURL}
           // En modo oscuro las fotos claras brillan sobre el fondo: se atenúan levemente.
           className="object-cover dark:brightness-95"
         />
