@@ -17,8 +17,10 @@ export function Footer({ name, tagline, navigation, social, contactLines, year }
   return (
     // En modo oscuro el primary (azul de botones) es muy llamativo para un bloque grande: usa surface.
     <footer className="focus-on-dark bg-primary text-primary-foreground dark:border-t dark:border-border dark:bg-surface dark:text-foreground">
-      <Container className="grid gap-10 py-12 md:grid-cols-3">
-        <div>
+      {/* Columnas solo desde lg: en tablet no caben bien y se apilan como en móvil.
+          La marca toma el espacio libre (flex-1) y las otras columnas miden lo que su contenido. */}
+      <Container className="flex flex-col gap-10 py-12 lg:flex-row lg:gap-24 xl:gap-32">
+        <div className="lg:flex-1">
           <p className="text-lg font-bold">{name}</p>
           <p className="mt-2 text-sm opacity-80">{tagline}</p>
           <SocialLinks links={social} label="Síguenos" className="mt-6" />

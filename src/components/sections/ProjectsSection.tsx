@@ -17,20 +17,28 @@ type Props = {
   viewProjectLabel?: string;
   /** Se muestra sobre el título (ej: ruta de navegación en la página del listado). */
   breadcrumbs?: ReactNode;
+  /**
+   * Cuántos trabajos mostrar (por defecto, todos). Si es impar y hay uno más en `projects`,
+   * ese extra se muestra solo con 2 columnas (tablet) para no dejar la última fila a medias.
+   */
+  visibleCount?: number;
 };
 
-export function ProjectsSection({ id, label, projects, showAllLink = true, showAllLabel = "Ver todos", viewProjectLabel, breadcrumbs }: Props) {
-  if (projects.length === 0) return null;
+export function ProjectsSection({ id, label, projects, showAllLink = true, showAllLabel = "Ver todos", viewProjectLabel, breadcrumbs, visibleCount }: Props) {
+  const count = Math.min(visibleCount ?? projects.length, projects.length);
+  const fillTwoColumns = count % 2 === 1 && projects.length > count;
+  const items = projects.slice(0, fillTwoColumns ? count + 1 : count);
+  if (items.length === 0) return null;
 
   return (
-    <section id={id} aria-labelledby={`${id}-title`} className="bg-surface py-16 sm:py-24">
+    <section id={id} aria-labelledby={`${id}-title`} className="bg-surface py-12">
       <Container>
         {breadcrumbs}
         <SectionHeading id={`${id}-title`} title={label} />
         {/* auto-rows-fr: todas las filas con el alto de la tarjeta más alta. */}
         <ul className="grid auto-rows-fr gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {projects.map((project) => (
-            <li key={project.slug}>
+          {items.map((project, index) => (
+            <li key={project.slug} className={index === count ? "hidden sm:block lg:hidden" : undefined}>
               <ProjectCard project={project} viewLabel={viewProjectLabel} />
             </li>
           ))}
