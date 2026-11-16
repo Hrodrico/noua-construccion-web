@@ -15,13 +15,16 @@ export const metadata: Metadata = {
 
 export default async function HomePage() {
   const { sections, labels } = site;
-  const [hero, about, services, projects, reviews] = await Promise.all([
+  const [hero, about, services, featuredProjects, allProjects, reviews] = await Promise.all([
     getHero(),
     getAbout(),
     getServices(),
     getProjects({ featured: true }),
+    getProjects(),
     getReviews(),
   ]);
+  // Destacados primero; el resto solo completa la fila en tablet (ver visibleCount).
+  const projects = [...featuredProjects, ...allProjects.filter((project) => !project.featured)];
 
   return (
     <>
@@ -35,6 +38,7 @@ export default async function HomePage() {
           id={sectionIds.projects}
           label={labels.projects}
           projects={projects}
+          visibleCount={featuredProjects.length}
           showAllLabel={site.actions?.allProjects}
           viewProjectLabel={site.actions?.viewProject}
         />

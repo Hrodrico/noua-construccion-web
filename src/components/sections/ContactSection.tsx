@@ -15,7 +15,7 @@ type Props = {
 function Item({ icon, title, children }: { icon: ReactNode; title: string; children: ReactNode }) {
   return (
     <li className="flex gap-4">
-      <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
+      <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border bg-background text-primary dark:text-foreground">
         {icon}
       </span>
       <div>
