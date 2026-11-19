@@ -94,7 +94,8 @@ Esta versión difiere de lo que suele conocerse de Next.js; consulta `node_modul
 | Base de datos / CMS | Cliente en `src/lib/db.ts` (o similar), reescribir getters de `lib/data.ts`, `cacheTag` + `revalidateTag` al mutar. Los tipos de `types/content.ts` siguen siendo el contrato de la UI. |
 | Formularios | Server Actions con validación en servidor (ej: zod) y respuesta accesible; nunca confiar en validación solo del cliente. |
 | E-commerce / catálogo | Ruta `(site)/productos/` siguiendo el patrón de `trabajos/` (listado + `[slug]` + `generateStaticParams`). |
-| Imágenes remotas | Configurar `images.remotePatterns` en `next.config.ts`. |
+| Imágenes remotas | Configurar `images.remotePatterns` en `next.config.ts` y agregar el dominio a `img-src` de la CSP. |
+| Recurso externo (script, iframe, API) | Agregar el dominio a la directiva de `contentSecurityPolicy` en `next.config.ts` (CSP estática, sin nonces, para no perder el prerender). |
 
 ## Variables de entorno y secretos
 
