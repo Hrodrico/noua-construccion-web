@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { Geist } from "next/font/google";
 import Script from "next/script";
 import { site } from "@/lib/site";
@@ -49,6 +50,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           </Script>
         )}
         {children}
+        {/* Visitas y páginas vistas en el panel de Vercel (Analytics); fuera de Vercel no envía nada. */}
+        <Analytics />
       </body>
     </html>
   );
