@@ -24,7 +24,7 @@ Luego abre un PR y fusiónalo con **Create a merge commit** (no squash ni rebase
 - [Next.js 16](https://nextjs.org/) (App Router, Cache Components)
 - [React 19](https://react.dev/) y [TypeScript](https://www.typescriptlang.org/)
 - [Tailwind CSS 4](https://tailwindcss.com/)
-- [Vercel](https://vercel.com/) para hosting
+- [Vercel](https://vercel.com/) para hosting, con [Vercel Analytics](https://vercel.com/docs/analytics) para medir visitas
 - Modo claro y oscuro (sigue al sistema, con botón sol/luna en el header), sin dependencias extra
 
 Requiere **Node.js 24 LTS** (obligatorio). Con `nvm use` se activa la versión de `.nvmrc`. Con otra versión, `npm install` falla (`engine-strict` en `.npmrc`) y `dev`/`build`/`start` se detienen con un aviso.
@@ -162,6 +162,7 @@ Vercel publica cada push a `main` en producción y cada PR como vista previa.
    - En NIC.cl, en la configuración técnica del dominio elige **Servidores DNS** e ingresa `ns1.vercel-dns.com` y `ns2.vercel-dns.com` (o los que indique Vercel).
    - Cuando Vercel muestre "Valid Configuration", el sitio queda en el dominio con HTTPS. Debe coincidir con `url` en `config.ts`.
 3. **Repositorio privado en el plan Hobby:** Vercel solo publica commits cuyo autor puede verificar en GitHub. Configura en este repo el correo de tu cuenta: `git config user.email "<correo de GitHub>"`.
+4. **Analytics:** el componente `<Analytics />` ya está en `src/app/layout.tsx`. En el proyecto de Vercel abre la pestaña **Analytics**, pulsa **Enable** y vuelve a desplegar. Las visitas aparecen unos minutos después. En local y fuera de Vercel no envía datos.
 
 ## Seguridad
 
