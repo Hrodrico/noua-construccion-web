@@ -1,0 +1,23 @@
+# Actualizaciones de dependencias: PR trimestrales (agrupados). Las alertas de seguridad abren PR
+# de inmediato, sin esperar este calendario.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: quarterly
+    open-pull-requests-limit: 5
+    groups:
+      minor-y-parches:
+        update-types: [minor, patch]
+    ignore:
+      # TypeScript fijado en ~6.0 hasta que typescript-eslint soporte 6.1+ (ver CLAUDE.md).
+      - dependency-name: typescript
+        update-types: [version-update:semver-minor, version-update:semver-major]
+      # Node se cambia a mano junto con engines.node y .nvmrc.
+      - dependency-name: "@types/node"
+        update-types: [version-update:semver-major]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: quarterly

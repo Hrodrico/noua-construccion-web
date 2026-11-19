@@ -164,6 +164,12 @@ Vercel publica cada push a `main` en producción y cada PR como vista previa.
 3. **Repositorio privado en el plan Hobby:** Vercel solo publica commits cuyo autor puede verificar en GitHub. Configura en este repo el correo de tu cuenta: `git config user.email "<correo de GitHub>"`.
 4. **Analytics:** el componente `<Analytics />` ya está en `src/app/layout.tsx`. En el proyecto de Vercel abre la pestaña **Analytics**, pulsa **Enable** y vuelve a desplegar. Las visitas aparecen unos minutos después. En local y fuera de Vercel no envía datos.
 
+## Seguridad
+
+- **Cabeceras HTTP** en `next.config.ts`: Content Security Policy, HSTS, `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy` y `Permissions-Policy`; sin `X-Powered-By`. `e2e/security.spec.ts` verifica que estén y que la CSP no bloquee nada del sitio.
+- **CSP estática (sin nonces)** para conservar el prerender. Si agregas un recurso externo (mapa embebido, imágenes remotas, otro script), amplía la directiva correspondiente de `contentSecurityPolicy`, o el navegador lo bloqueará.
+- **Dependencias:** `.github/dependabot.yml` abre PR trimestrales con actualizaciones y PR inmediatos ante alertas. Activa en GitHub **Settings → Advanced Security → Dependabot alerts** y **Dependabot security updates**. Para revisar a mano: `npm audit`.
+
 ## Contribuir
 
 - Flujo: rama (`feat/…`, `fix/…`, `chore/…`) → PR → CI en verde → merge a `main` con **Create a merge commit**.
